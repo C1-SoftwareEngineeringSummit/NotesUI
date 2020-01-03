@@ -13,7 +13,7 @@ class NoteStore: ObservableObject {
         "Pay the electricity bill",
         "Get my car washed",
         "Made assignment"
-        ].map { Note(content: $0) }
+        ].map { Note(content: $0, title: $0) }
 }
 
 

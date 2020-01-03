@@ -9,19 +9,27 @@
 import SwiftUI
 
 struct NoteEditingView: View {
-    @Binding var note: Note
-    
+    @EnvironmentObject var noteStore: NoteStore
+    var note: Note
+
+    var noteIndex: Int {
+        noteStore.notes.firstIndex(where: { $0.id == note.id }) ?? 0
+    }
+
     var body: some View {
-        Form {
-            TextField("Name", text: $note.content)
+        VStack {
+            TextField("Enter a title here", text: $noteStore.notes[noteIndex].title)
+                .font(.title)
+            TextView(text: $noteStore.notes[noteIndex].content)
         }
+        .padding()
+        .navigationBarTitle("", displayMode: .inline)
     }
 }
 
 struct TaskEditingView_Previews: PreviewProvider {
     static var previews: some View {
-        NoteEditingView(
-            note: .constant(Note(content: "To Do"))
-        )
+        let noteStore = NoteStore()
+        return NoteEditingView(note: noteStore.notes[0]).environmentObject(noteStore)
     }
 }

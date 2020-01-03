@@ -9,13 +9,13 @@
 import SwiftUI
 
 struct RowView: View {
-    @Binding var note: Note
+    var note: Note
     
     var body: some View {
         NavigationLink(
-            destination: NoteEditingView(note: $note)
+            destination: NoteEditingView(note: note)
         ) {
-            Text(note.content)
+            Text(note.title)
         }
     }
 }
@@ -23,7 +23,7 @@ struct RowView: View {
 struct RowView_Previews: PreviewProvider {
     static var previews: some View {
         RowView(
-            note: .constant(Note(content: "To Do") )
+            note: Note(content: "To Do", title: "To Do")
         )
     }
 }
