@@ -31,7 +31,7 @@ We will be using structures inside the file to represent our `Note` model for st
     struct Note {
     var name: String
  }
-    ```
+```
     > Every note needs to have a name and that name should be changeable, so a variable (var) is a way to go with a type String. This is the way to create a note but this app is going to be able to store as many notes as you want. Now you will need a place to keep track of all of those notes and that, too, is going to be a model.
 
 ### Creating the NoteStore Model
@@ -65,7 +65,6 @@ We will be using structures inside the file to represent our `Note` model for st
    * In order to accomplish this let's define a property and create an instance of a `NoteStore`, in your `ContentView`.
 ```swift
     var noteStore: NoteStore
-
 ```
 When we use List or ForEach to make dynamic views, SwiftUI needs to know how it can identify each item uniquely otherwise it’s not able to compare view hierarchies to figure out what has changed.
 To accomplish this modify the Note structure to make it conform to a new protocol called Identifiable, like this:
@@ -114,11 +113,56 @@ We will add more UI elements to our first view. First embed your list inside a N
     }
 ```
 
-As you Navigation is all setup, you can now add a sheet by searching `sheet` in the modifier tab on Library. You can easily drag the `sheet` on your canvas.
+As the NavigationView is all setup, you can now add a sheet by searching `sheet` in the modifier tab on Library. You can easily drag the `sheet` on your canvas.
 ```swift
-    .sheet(isPresented: $modalIsPresented) {
-       NoteDetail()
+   .sheet(isPresented: $modalIsPresented) {
+      NoteDetail()
+   }
+```
+   
+
+### Creating New Notes
+For adding new notes we will be creating a new SwiftUI file and will name it as `NoteDetail.swift`.
+   * Use a TextFiled as its body using this initializer:
+```swift
+	TextField("Name", text: $note.name)
+```
+   * Set the placeholder title to `Name`
+   * Set the text argument to a new @state variable
+   * Now hit Shift + command + L to bring up the library, search for `TextFiled` and add inside the view's body.
+   * We’ll also adding a button with title as `Add` which will used to update Notes array.
+
+To combine the TextField and Add button on `NoteDetails.swift` view will will use `Form` container and put both of these UI elements inside it as follows:
+```swift
+TextField("Add note here", text: $text)
+      Button("Add") {
+      }
+      .disabled(text.isEmpty)
     }
+```
+
+* We will define a variable of type NoteStore in the same class and update above code to add a new Note when user performs button action.
+```swift
+Button("Add") {
+        self.noteStore.notes.append(
+          Note(name: self.text)
+        )
+      }
+```
+   * As of now we are able to add new note in our NoteStore but when we clicked on `Add` button it didn’t dismiss the `sheet` for us. 
+   * Every SwiftUI view exists in an environment which is a storage container for information that it either needs to function.
+   * To dismiss the sheet we will be taking advantage of `SwiftUI’s Environment` and will add an Environment view property.
+   * This Environment view property would let us to know if the sheet is already presented and would also allow us to dismiss the sheet programatically.
+   * The syntax for this starts with an Environment attribute and set of parentheses, inside the parentheses we will provide the key path which is backslash dot presentationMode.
+   * This gives you an access to environment’s presentationMode but we need to let compiler know how
+      we are going to refer this inside the class. For this we will supply a var name as follows:
+
+```swift
+@Environment(\.presentationMode) var presentationMode
+```
+   > You can check by click on presentationMode that its a binding to a presentationMode instance. Within the button action you need to access presentationMode instance itself. To get the value that a binding encapsulates, use the wrappedValue property. You will use this wrapped value to dismiss the sheet.
+```swift
+	self.presentationMode.wrappedValue.dismiss()
 ```
 
 To be continued...
