@@ -9,19 +9,19 @@
 import SwiftUI
 
 struct NoteEditingView: View {
-  @Binding var note: Note
-
-  var body: some View {
-    Form {
-      TextField("Name", text: $note.name)
+    @Binding var note: Note
+    
+    var body: some View {
+        Form {
+            TextField("Name", text: $note.content)
+        }
     }
-  }
 }
 
 struct TaskEditingView_Previews: PreviewProvider {
-  static var previews: some View {
-    NoteEditingView(
-        note: .constant(Note(name: "To Do"))
-    )
-  }
+    static var previews: some View {
+        NoteEditingView(
+            note: .constant(Note(content: "To Do"))
+        )
+    }
 }
