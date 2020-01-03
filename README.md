@@ -3,86 +3,131 @@ Since you will be learning a pletheora of information during Capital One's softw
 
 # Step By Step Instructions
 
-###
 SwiftUI is a declarative framework for building applications for Apple devices. 
 This means that instead of using Storyboards or programmatically generating your interface, you can use the simplicity of the SwiftUI framework.
 
 ## Initial Project and SwiftUI Setup
 
-* New Project -> Single View App -> Choose `Swift` as Language and `SwiftUI` as User Interface
-* When you create a new project, Xcode provides a default `ContentView.swift` file.
- 
-* Next go to **Project Navigator** (⌘1) and add a new file to the project
-  * Use the standard **Swift File** option then hit next
-  * You are going to define a type for the notes that will go on your list so name your class as `Note`
-  * Click Next and then Create
+1. Open Terminal, and navigate to the directory in which you want to save this project
+2. Run the following command in Terminal: `git clone <INSERT GIT LINK HERE>`
+    * This will clone our starter project into your file system
+3. Navigate into the newly created folder using the following command: `cd NotesUI`
+4. Open the starter project in the latest version of Xcode using the command: `xed .`
+    * You can also double-click the `Notes.xcodeproj` file in Finder
+5. Go to **Project Navigator** (⌘1) and add a new file to the project
+    1. Right-click on the **yellow** Notes folder, and select `New File...`
+    2. Use the standard **Swift File** option then hit next
+    3. You are going to define a type that will represent a note, so name your file `Note`
+    4. Click `Create`
   
-### A few words on `Note Model`
+### A few words on our Note model
 A note is going to be what we call a data model or more simply, a model.
 A model is a way to structure data, so that you can work inside your app's code and have a type that represents a real-world concept, like a note.
 
-   * Next you need to organize your models into groups.
-   * For that you need to make sure that your Note.swift is inside the Notes folder first.
-   * Now right-click on Note.swift and select **New Group from Selection**.
-   * That will enclose it in a folder. Name this folder as Models.
+* Next you need to organize your models into groups
+* For that you need to make sure that your `Note.swift` is inside the yellow `Notes` folder first
+    * If it isn't, drag it there in the **Project Navigator**
+* Right-click on `Note.swift` and select **New Group from Selection**
+* That will enclose it in a folder, which we can name `Models`
 
-We will be using structures inside the file to represent our `Note` model for storing information about Notes:
-  ```swift
-    struct Note {
-    var name: String
- }
-```
-    > Every note needs to have a name and that name should be changeable, so a variable (var) is a way to go with a type String. This is the way to create a note but this app is going to be able to store as many notes as you want. Now you will need a place to keep track of all of those notes and that, too, is going to be a model.
-
-### Creating the NoteStore Model
-* Create a new swift file which we will use to declare our `NoteStore` model
-  * Right-click on the Models folder and add a new file.
-  * File -> New -> File -> Swift File
-  * Name the file `NoteStore.swift`
-  * Notes app is going to have one NoteStore, but you will need to use it across several screens, so a reference type that is class is what you need NoteStore to be.
-
+We will be using structures inside `Note.swift` to represent our `Note` model. Add the following code inside of `Note.swift`:
 ```swift
-    class NoteStore {
-    var notes = [
-    "Pay the electricity bill",
-    "Pay the electricity bill Get my car washed",
-    "Made assignment"
-        ].map { Note(name: $0) }		
-    }
+struct Note {
+    var content: String
+    var title: String
+    let dateCreated = Date()
+}
 ```
-   > Created a variable array names `notes` as property of NoteStore and pre-populate the array with three notes and used map closure to transform our name strings to full fledged notes. Now, with our notes ready we will take advantage of the SwiftUI to display on a GUI. We will be using a List to display the content. 
+> Every note needs a title and content, both of which should be changeable, so a variable (var) of type String is the way to go. 
 
+So this represents a note, but this app is going to store as many notes as you want. Now you will need a place to keep track of all of those notes and that, too, is going to be a model.
 
-### Displaying notes on user interface.
-   * A List is a container which displays your data in a column, with a row for each entry.
-   * For this open `ContentView.swift` file.
-   * At the moment, `ContentView.swift` file is still fresh from the template, with a `Hello World` Text View.
-   * Command-click on `Text View`, and choose Embed in List.
+### Creating the NoteStore model
+* Create a new Swift file which we will use to declare our `NoteStore` model
+    1. Right-click on the Models folder and select `New File...` again
+    2. Select **Swift File**
+    3. Name the file `NoteStore.swift`
+
+The Notes app is going to have one NoteStore, but you will need to use it across several screens, so NoteStore will be a reference type (class), rather than a struct. Add the following to `NoteStore.swift`:
+```swift
+import Combine
+
+class NoteStore: ObservableObject {
+    @Published var notes = [
+        "Buy groceries",
+        "Book flight to Spain",
+        "Call Johnny back"
+        ].map { Note(content: $0, title: $0) }
+}
+```
+> Here, we created a variable array named `notes` as a property of NoteStore and pre-populated it with three Strings. We then used `map` closure to transform our Strings into Notes.
+>
+> We also imported the **Combine** framework, conformed to **ObservableObject**, and marked our notes as **Published**. This is all so that we can user our NoteStore later as an **Environment Object**. Read more about Environment Objects [here](https://www.hackingwithswift.com/quick-start/swiftui/whats-the-difference-between-observedobject-state-and-environmentobject), and read more about Observable Objects [here](https://www.hackingwithswift.com/quick-start/swiftui/observable-objects-environment-objects-and-published).
+
+Now, with our notes ready we will take advantage of SwiftUI to create an interface. We will be using a List to display the content. 
+
+### Displaying notes
+A **List** is a container which displays your data in a column, with a row for each entry.
+
+1. Open `ContentView.swift`
+    * At the moment, this file is still fresh from the template, with only a `Hello World` TextView
+2. Command-click on `Text("Hello World")`, and choose `Embed in List`
    
-  ![Embed In List](/Assets/MarkdownAssets/EmbedInList.png)
+![Embed In List](/Assets/MarkdownAssets/EmbedInList.png)
 
-   * At this point you have your pre-defined list of notes ready to be displayed for UI.
-   * In order to accomplish this let's define a property and create an instance of a `NoteStore`, in your `ContentView`.
+At this point, our list of notes is ready to be displayed, we just need access to our NoteStore. Define the following var as the first line in the `ContentView` struct:
 ```swift
-    var noteStore: NoteStore
+@EnvironmentObject var noteStore: NoteStore
 ```
-When we use List or ForEach to make dynamic views, SwiftUI needs to know how it can identify each item uniquely otherwise it’s not able to compare view hierarchies to figure out what has changed.
-To accomplish this modify the Note structure to make it conform to a new protocol called Identifiable, like this:
-  ```swift
-    struct Note: Identifiable {
 
+> Remember how we made our NoteStore conform to `ObservableObject` before? We did that in order to use the **EnvironmentObject** attribute here in our `ContentView`. An EnvironmentObject is a value that is available via the application itself. This means it’s shared data that every view can read/write if they want to. And because it is shared, there's no need to initialize it within `ContentView`. We'll do that elsewhere.
+
+At this point, you may also get an error in `ContentView_Previews`. This is because you need to provide your preview with the environment variable that we just defined. In order to fix that, replace the `ContentView()` line in your `ContentView_Previews` struct to the following:
+
+```swift
+ContentView().environmentObject(NoteStore())
+```
+
+Now, everything should compile alright.
+
+When we use `List` or `ForEach` to make dynamic views, SwiftUI needs to know how it can identify each item *uniquely*, otherwise it’s not able to compare view hierarchies to figure out what has changed.
+To accomplish this, modify the `Note` structure in `Note.swift` to make it conform to the **Identifiable** protocol, like this:
+```swift
+struct Note: Identifiable {
     let id = UUID()
-    var name: String
- }
+    var content: String
+    var title: String
+    let dateCreated = Date()
+}
 ```
-   > All we’ve done is add Identifiable to the list of protocol conformances, nothing more. This is one of the protocols built into Swift, and means “this type can be identified uniquely.” It has only one requirement, which is that there must be a property called id that contains a unique identifier. We just added that, so we don’t need to do any extra work – our type conforms to Identifiable just fine. Notes are now guaranteed to be identifiable uniquely, we no longer need to tell ForEach which property to use for the identifier – it knows there will be an id property and that it will be unique, because that’s the point of the Identifiable protocol.
 
-   * As a result of this change we can modify the ForEach in ContentView, to this:
+> First, we added **Identifiable** to the list of protocol conformances. **Identifiable** means “this type can be identified uniquely.” It has only one requirement, which is that there must be a property called `id` that contains a unique identifier. We also added that, so we don’t need to do any extra work – our type conforms to **Identifiable** now. 
+>
+> Our `id` is a **UUID**, which short for Universally Unique Identifier. You can read more about that [here](https://developer.apple.com/documentation/foundation/uuid). 
+>
+> Notes are now guaranteed to be uniquely identifiable, and we won't need to tell our `ForEach` loop which property to use for the identifier – it knows there will be a unique `id`. You can read more about this [here](https://www.hackingwithswift.com/quick-start/swiftui/how-to-create-views-in-a-loop-using-foreach).
+
+As a result of this change we can use the following code to display our list of notes. Modify the `List` code in `ContentView.swift` to match the following:
 ```swift
-   ForEach(noteStore.notes) { note in
-                Text(note.name)
-            }
+List {
+    ForEach(noteStore.notes) { note in
+        Text(note.title)
+    }
+}
 ```
+
+***
+
+Now would be a good time to run the project to make sure everything is working properly. But before we do that, we need to provide our views with the `NoteStore` environment object! This is done via `SceneDelegate.swift`. Open that file, and in the first function, replace `let contentView = ContentView()` with the following:
+
+```swift
+let contentView = ContentView().environmentObject(NoteStore())
+```
+
+> This will set the `NoteStore` environment object for our ContentView (and all of its subviews) to use.
+
+*Now* we can build and run the project. Click the "play" button in the upper left. If everything went well, it should look something like this.
+
 * In SwiftUI, there is a type of modal view, which takes up almost the entire screen. It's called a `sheet` and you can add one to a view using the sheet methods. 
      A sheet requires a `Bool binding` to know where it should be presented and because you are only going to be launching the sheet from your ContentView,
      you can provide that binding by way of a State variable.
