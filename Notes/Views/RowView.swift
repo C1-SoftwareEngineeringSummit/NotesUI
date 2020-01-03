@@ -9,21 +9,21 @@
 import SwiftUI
 
 struct RowView: View {
-  @Binding var note: Note
-
-  var body: some View {
-    NavigationLink(
-        destination: NoteEditingView(note: $note)
-    ) {
-      Text(note.name)
+    @Binding var note: Note
+    
+    var body: some View {
+        NavigationLink(
+            destination: NoteEditingView(note: $note)
+        ) {
+            Text(note.content)
+        }
     }
-  }
 }
 
 struct RowView_Previews: PreviewProvider {
-  static var previews: some View {
-    RowView(
-      note: .constant(Note(name: "To Do") )
-    )
-  }
+    static var previews: some View {
+        RowView(
+            note: .constant(Note(content: "To Do") )
+        )
+    }
 }
