@@ -24,7 +24,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             let window = UIWindow(windowScene: windowScene)
 
             // Create the SwiftUI view that provides the window contents.
-            let contentView = ContentView(noteStore: NoteStore())
+            let contentView = ContentView().environmentObject(NoteStore())
 
             window.rootViewController = UIHostingController(rootView: contentView)
             self.window = window

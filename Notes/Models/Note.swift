@@ -11,5 +11,6 @@ import Foundation
 struct Note: Identifiable {
     let id = UUID()
     var content: String
+    var title: String
     let dateCreated = Date()
 }

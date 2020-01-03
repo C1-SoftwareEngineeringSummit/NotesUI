@@ -10,13 +10,32 @@ import SwiftUI
 
 struct TextView: UIViewRepresentable {
     @Binding var text: String
+
+    func makeCoordinator() -> Coordinator {
+        return(Coordinator(self))
+    }
     
     func makeUIView(context: Context) -> UITextView {
-        return UITextView()
+        let textView = UITextView()
+        textView.delegate = context.coordinator
+        textView.font = UIFont.systemFont(ofSize: 16)
+        return textView
     }
     
     func updateUIView(_ uiView: UITextView, context: Context) {
         uiView.text = text
+    }
+
+    class Coordinator: NSObject, UITextViewDelegate {
+        var textView: TextView
+
+        init(_ uiTextView: TextView) {
+            self.textView = uiTextView
+        }
+
+        func textViewDidChange(_ textView: UITextView) {
+            self.textView.text = textView.text
+        }
     }
 }
 
