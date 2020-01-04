@@ -134,6 +134,8 @@ let contentView = ContentView().environmentObject(NoteStore())
 
 *Now* we can build and run the project. Click the "play" button in the upper left. If everything went well, it should look something like this.
 
+<img src="/Assets/MarkdownAssets/first_test.png" width=300/>
+
 ![Our first test!](/Assets/MarkdownAssets/first_test.png)
 
 ***
