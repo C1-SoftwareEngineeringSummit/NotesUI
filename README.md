@@ -360,6 +360,70 @@ Let's test this out once more. You should finally be able to get rid of your not
 
 ### Editing existing notes
 
+The last major thing we need to take care of is editing the content of existing notes. Right now, if you click on any row in the List, nothing will happen. Let's start by creating a new `View` that will allow us to edit our notes.
+
+1. Create a new SwiftUI file inside of the `Views` group and name it `EditNoteView.swift`
+2. Start by adding the following two variables at the top of the struct
+
+```swift
+@EnvironmentObject var noteStore: NoteStore
+var note: Note
+```
+
+> We already know what our EnvironmentObject is, and the second var should be straightforward. This will hold the `Note` that we are editing.
+
+3. Add the following computed variable below the first two.
+
+```swift
+var noteIndex: Int {
+    noteStore.notes.firstIndex(where: { $0.id == note.id }) ?? 0
+}
+```
+
+> This is a little more complicated. Whenever we access `noteIndex`, the code inside will run. This code iterates over the `noteStore.notes` array, and finds the index of the first note that matches the `id` of our `var note`. 
+>
+> The `??` mean that if this function doesn't find any matching notes, we will return the index 0 instead. Now, this is not be the best idea in a production app, but it will suffice for now.
+>
+> We'll use this value later on in our view's `body`.
+
+4. Replace the `body` of our `EditNoteView` with the following code.
+
+```swift
+VStack {
+    TextField("Enter a title here", text: $noteStore.notes[noteIndex].title)
+        .font(.title)
+    TextView(text: $noteStore.notes[noteIndex].content)
+}
+.padding()
+.navigationBarTitle("", displayMode: .inline)
+```
+
+> Hopefully, this looks familiar. It's basically the same code from our `AddNoteView` minus the navigation bar item.
+>
+> However, the key difference is that we are binding the `TextField` and the `TextView` to `$noteStore.notes[noteIndex].title`. In `AddNoteView` we bound to String variables so that we could create a new `Note`. Here, we bind directly to an existing note within the `noteStore`, since we want to edit that note. Any changes made in the `TextField` or `TextView` are reflected immediately in the `noteStore`, and elsewhere in the app.
+
+#### Fixing our preview
+
+Your preview for `EditNoteView` shouldn't work at this point. If you remember from before, we need to give our `NoteEditingView` a `NoteStore` environment variable. However, this view also needs a `Note` to edit. However, that `Note` needs to exist in the `NoteStore` that you provide to the preview. Replace `static var previews` with the following.
+
+```swift
+static var previews: some View {
+    let noteStore = NoteStore()
+    return NoteEditingView(note: noteStore.notes[0]).environmentObject(noteStore)
+}
+```
+
+> This creates a NoteStore, and passes the first Note at index 0 to the preview. It also sets the evironment object to the same NoteStore.
+
+#### Extracting a subview
+
+
+
+
+
+
+
+
 
 
 
