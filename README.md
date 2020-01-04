@@ -404,12 +404,12 @@ VStack {
 
 #### Fixing our preview
 
-Your preview for `EditNoteView` shouldn't work at this point. If you remember from before, we need to give our `NoteEditingView` a `NoteStore` environment variable. However, this view also needs a `Note` to edit. However, that `Note` needs to exist in the `NoteStore` that you provide to the preview. Replace `static var previews` with the following.
+Your preview for `EditNoteView` shouldn't work at this point. If you remember from before, we need to give our `EditNoteView` a `NoteStore` environment variable. However, this view also needs a `Note` to edit. However, that `Note` needs to exist in the `NoteStore` that you provide to the preview. Replace `static var previews` with the following.
 
 ```swift
 static var previews: some View {
     let noteStore = NoteStore()
-    return NoteEditingView(note: noteStore.notes[0]).environmentObject(noteStore)
+    return EditNoteView(note: noteStore.notes[0]).environmentObject(noteStore)
 }
 ```
 
@@ -417,15 +417,48 @@ static var previews: some View {
 
 #### Extracting a subview
 
+As an exercise in componentization and abstraction, let's extract our List row into its own subview. Luckily, Xcode makes this really easy for us. 
 
+1. Open up `ContentView.swift`
+2. Cmd(⌘)-click on `Text(note.title)` within the `ForEach` loop
+3. Select **Extract Subview**
+4. Rename the new extracted view to `RowView`
 
+> There will be some errors, but we will address them as we clean this up a bit.
 
+5. Create a new SwiftUI file in the `Views` group, and name it `RowView.swift`
+6. Cut the extracted `RowView` struct from `ContentView.swift`, and paste it over top of the `RowView` struct in `RowView.swift`
+    1. You probably have an error in `RowView.swift` regarding a missing `note` variable
+    2. Add the following variable to the `RowView` struct
 
+```swift
+var note: Note
+```
 
+7. Wrap the `Text(note.title)` in the following navigation link
 
+```swift
+NavigationLink(destination: EditNoteView(note: note)) {
+    Text(note.title)
+}
+```
 
+> This should look familiar. We're creating a navigation link that takes the user to a `EditNoteView`, similar to our "+" button from earlier.
 
+8. When we create our `RowView`s in our List, we need to pass in the appropriate note
+    1. Return to `ContentView.swift` and inside of the `ForEach` loop, replace `RowView()` with the following
 
+```swift
+RowView(note: note)
+```
+
+### Testing it out, part 4
+
+We should be just about good at this point. Build and run your project once more to see if you're able to click on an existing note and edit its contents.
+
+![Our fourth test!](/Assets/MarkdownAssets/fourth_test.png)
+
+***
 
 
 
