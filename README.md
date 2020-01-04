@@ -1,4 +1,5 @@
 # Notes-App
+
 Since you will be learning a pletheora of information during Capital One's software engineering summit, let's build an iOS app for taking notes. While building this app we'll cover the basics of iOS and Xcode.
 
 # Step By Step Instructions
@@ -21,6 +22,7 @@ This means that instead of using Storyboards or programmatically generating your
     4. Click `Create`
   
 ### A few words on our Note model
+
 A note is going to be what we call a data model or more simply, a model.
 A model is a way to structure data, so that you can work inside your app's code and have a type that represents a real-world concept, like a note.
 
@@ -43,6 +45,7 @@ struct Note {
 So this represents a note, but this app is going to store as many notes as you want. Now you will need a place to keep track of all of those notes and that, too, is going to be a model.
 
 ### Creating the NoteStore model
+
 * Create a new Swift file which we will use to declare our `NoteStore` model
     1. Right-click on the Models folder and select `New File...` again
     2. Select **Swift File**
@@ -62,11 +65,12 @@ class NoteStore: ObservableObject {
 ```
 > Here, we created a variable array named `notes` as a property of NoteStore and pre-populated it with three Strings. We then used `map` closure to transform our Strings into Notes.
 >
-> We also imported the **Combine** framework, conformed to **ObservableObject**, and marked our notes as **Published**. This is all so that we can user our NoteStore later as an **Environment Object**. Read more about Environment Objects [here](https://www.hackingwithswift.com/quick-start/swiftui/whats-the-difference-between-observedobject-state-and-environmentobject), and read more about Observable Objects [here](https://www.hackingwithswift.com/quick-start/swiftui/observable-objects-environment-objects-and-published).
+> We also imported the **Combine** framework, conformed to **ObservableObject**, and marked our notes as **Published**. This is all so that we can use our NoteStore later as an **Environment Object**. Read more about Environment Objects [here](https://www.hackingwithswift.com/quick-start/swiftui/whats-the-difference-between-observedobject-state-and-environmentobject), and read more about Observable Objects [here](https://www.hackingwithswift.com/quick-start/swiftui/observable-objects-environment-objects-and-published).
 
 Now, with our notes ready we will take advantage of SwiftUI to create an interface. We will be using a List to display the content. 
 
 ### Displaying notes
+
 A **List** is a container which displays your data in a column, with a row for each entry.
 
 1. Open `ContentView.swift`
@@ -82,13 +86,15 @@ At this point, our list of notes is ready to be displayed, we just need access t
 
 > Remember how we made our NoteStore conform to `ObservableObject` before? We did that in order to use the **EnvironmentObject** attribute here in our `ContentView`. An EnvironmentObject is a value that is available via the application itself. This means it’s shared data that every view can read/write if they want to. And because it is shared, there's no need to initialize it within `ContentView`. We'll do that elsewhere.
 
-At this point, you may also get an error in `ContentView_Previews`. This is because you need to provide your preview with the environment variable that we just defined. In order to fix that, replace the `ContentView()` line in your `ContentView_Previews` struct to the following:
+You might get an error in `ContentView_Previews`. This is because you need to provide your preview with the environment variable that we just defined. In order to fix that, replace the `ContentView()` line in your `ContentView_Previews` struct to the following:
 
 ```swift
 ContentView().environmentObject(NoteStore())
 ```
 
-Now, everything should compile alright.
+Now, everything should compile alright. We'll need to do this for any `View` in which we use the `NoteStore` environment variable.
+
+#### Using List and ForEach
 
 When we use `List` or `ForEach` to make dynamic views, SwiftUI needs to know how it can identify each item *uniquely*, otherwise it’s not able to compare view hierarchies to figure out what has changed.
 To accomplish this, modify the `Note` structure in `Note.swift` to make it conform to the **Identifiable** protocol, like this:
@@ -118,6 +124,8 @@ List {
 
 ***
 
+### Testing it out, part 1
+
 Now would be a good time to run the project to make sure everything is working properly. But before we do that, we need to provide our views with the `NoteStore` environment object! This is done via `SceneDelegate.swift`. Open that file, and in the first function, replace `let contentView = ContentView()` with the following:
 
 ```swift
@@ -128,54 +136,190 @@ let contentView = ContentView().environmentObject(NoteStore())
 
 *Now* we can build and run the project. Click the "play" button in the upper left. If everything went well, it should look something like this.
 
-* In SwiftUI, there is a type of modal view, which takes up almost the entire screen. It's called a `sheet` and you can add one to a view using the sheet methods. 
-     A sheet requires a `Bool binding` to know where it should be presented and because you are only going to be launching the sheet from your ContentView,
-     you can provide that binding by way of a State variable.
-    * We will now define a state variable `modalIsPresented` to know when the sheet should be presented. By default we will keep the value of this state variable as `false`.
-    * We will turn modalIsPresented value as true on pressing `+` button on navigation bar.
+![Our first test!](/Assets/MarkdownAssets/first_test.png)
+
+### Adding a NavigationView
+
+The List looks *okay*, but it seems a little plain. Most lists in iOS apps will have a navigation bar at their top, so let's add one now.
+
+In `ContentView.swift`, wrap the `List` block in a `NavigationView`, and give the `List` a navigation bar title:
 
 ```swift
-   @State var modalIsPresented = false
-```
-We will add more UI elements to our first view. First embed your list inside a NavigationView and add trailing and leading navigation bar buttons as follows:
-```swift
-   NavigationView {
-        List {
-            ForEach(noteStore.notes) { index in
-              Text(note.name)
-            }
+NavigationView {
+    List {
+        ForEach(noteStore.notes) { note in
+            Text(note.title)
         }
-      .navigationBarTitle("Notes")
-      .navigationBarItems(
-        leading: EditButton(),
-        trailing:
-          Button(
-            action: { self.modalIsPresented = true }
-          ) {
-            Image(systemName: "plus")
-          }
-      )
     }
+    .navigationBarTitle("Notes")
+}
 ```
 
-As the NavigationView is all setup, you can now add a sheet by searching `sheet` in the modifier tab on Library. You can easily drag the `sheet` on your canvas.
-```swift
-   .sheet(isPresented: $modalIsPresented) {
-      NoteDetail()
-   }
-```
-   
+### Taking new notes
 
-### Creating New Notes
-For adding new notes we will be creating a new SwiftUI file and will name it as `NoteDetail.swift`.
-   * Use a TextFiled as its body using this initializer:
+To add new notes, we will be need a new SwiftUI file called `NoteDetail.swift`.
+
+* First, put `ContentView.swift` into a new group, called `Views`
+    * We can do this by right-clicking on `ContentView.swift`, and selecting `New Group from Selection`
+* Create a SwiftUI file `AddNoteView.swift` inside of `Views`
+
+Now, add the following vars at the beginning of the `AddNoteView` struct:
+
 ```swift
-	TextField("Name", text: $note.name)
+@EnvironmentObject var noteStore: NoteStore
+@Environment(\.presentationMode) var presentationMode
+@State var text = "Enter a note here"
+@State var title = ""
 ```
-   * Set the placeholder title to `Name`
-   * Set the text argument to a new @state variable
-   * Now hit Shift + command + L to bring up the library, search for `TextFiled` and add inside the view's body.
-   * We’ll also adding a button with title as `Add` which will used to update Notes array.
+
+> The `noteStore` should look familiar, it's the same **EnvironmentObject** we used before.
+>
+> You can alt-click on `presentationMode` to see that it's a binding to a presentationMode instance. We'll get into bindings later. However, `@Environment(\.presentationMode) var presentationMode` is very similar to `@EnvironmentObject`, but it is accessing a global environment that is already populated by SwiftUI with system-wide settings. We will use this later to dismiss our view.
+>
+> The last two variables are marked `@State`. This means that these vars will be stored by SwiftUI in special internal memory. These vars can be bound to `View`s in our `AddNoteView`, and as soon as the value of a `@State` property changes, SwiftUI will rebuild the `View` to accommodate these changes.
+>
+> This is definitely a complicated topic, so be sure to read more about it [here](https://swiftwithmajid.com/2019/06/12/understanding-property-wrappers-in-swiftui/).
+
+Now, use a TextFiled as its body to start:
+
+```swift
+var body: some View {
+    TextField("Enter a title here", text: $title)
+        .font(.title)
+}
+```
+
+> A `TextField` allows users to enter text. "Enter a title here" is our placeholder text, and `$title` is a **binding**. A **binding** creates a two-way connection between the `TextView` and the `@State var title`. User interaction with the `TextField` changes the value of `title`, and programmatically changing `title` causes the `TextField` to update its state.
+>
+> `.font(.title)` styles the font of this `TextField` to that of a title.
+
+However, we need more than a title for our note! Let's also add a `TextView` that will allow our users to enter a note's body, and bind that `TextView` to our `text` state var.
+
+```swift
+VStack {
+    TextField("Enter a title here", text: $title)
+        .font(.title)
+    TextView(text: $text)
+}
+```
+
+> We wrap everything in a `VStack`. As you might have guessed, this allows us to stack views vertically. There is also an `HStack`, for stacking horizontally.
+>
+> If you're interested in the implementation of the `TextView`, look at `TextView.swift`.
+
+At this point, you can give a new note a title, and a body, but there's still no way to save it! Let's fix that.
+
+```swift
+var body: some View {
+    VStack {
+        TextField("Enter a title here", text: $title)
+            .font(.title)
+        TextView(text: $text)
+    }
+    .navigationBarItems(
+        trailing: Button("Add") {
+            self.noteStore.notes.append(Note(content: self.text, title: self.title))
+            self.presentationMode.wrappedValue.dismiss()
+        }
+        .disabled(text.isEmpty || title.isEmpty))
+}
+```
+
+There's a bit going on here, so let's break it down.
+
+* We use `navigationBarItems(trailing:)` to add a button to the navigation bar, at the trailing (normally, right) edge
+* Our button has the text "Add"
+* The `Button`'s closure defines its functionality
+    * It adds a new `Note` to the `noteStore` with the given `text` and `title`
+    * It also uses the `presentationMode` variable to dismiss the current screen once it saves
+* `.disabled(text.isEmpty || title.isEmpty)` disables the "Add" button until the note is non-empty
+
+Nice, let's take care of some final aesthetic changes and be on our way. We'll be adding some padding around our views, and making the nav bar a little smaller.
+
+```swift
+var body: some View {
+    VStack {
+        TextField("Enter a title here", text: $title)
+            .font(.title)
+        TextView(text: $text)
+    }
+    .padding()
+    .navigationBarTitle("", displayMode: .inline)
+    .navigationBarItems(
+        trailing: Button("Add") {
+            self.noteStore.notes.append(Note(content: self.text, title: self.title))
+            self.presentationMode.wrappedValue.dismiss()
+        }
+        .disabled(text.isEmpty || title.isEmpty))
+}
+```
+
+#### Navigating to our new screen
+
+Now we have a beautiful new view, but no way of accessing it. Let's open up `ContentView.swift` and get to work.
+
+```swift
+NavigationView {
+    List {
+        ForEach(noteStore.notes) { note in
+            Text(note.title)
+        }
+    }
+    .navigationBarTitle("Notes")
+    .navigationBarItems(
+        trailing:
+        NavigationLink(destination: AddNoteView()) {
+            Image(systemName: "plus")
+        }
+    )
+}
+```
+
+This should look familiar. We're adding another nav bar item, but this time it's a `NavigationLink`.
+
+* A `NavigationLink` is a button that triggers a navigation presentation when pressed
+    * Our destination is a new `AddNoteView`
+* Our `NavigationLink`'s content is a "+" image
+
+***
+
+### Testing it out, part 2
+
+Now would be a good time to test our app again! Build and run, and you should be able to add new notes to your list.
+
+![Our second test!](/Assets/MarkdownAssets/second_test.png)
+
+### Deleting and rearranging notes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 To combine the TextField and Add button on `NoteDetails.swift` view will will use `Form` container and put both of these UI elements inside it as follows:
 ```swift
@@ -231,3 +375,63 @@ In practice, this is almost exclusively used with List and ForEach: we create
 
 To be continued...
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+* In SwiftUI, there is a type of modal view, which takes up almost the entire screen. It's called a `sheet` and you can add one to a view using the sheet methods. 
+     A sheet requires a `Bool binding` to know where it should be presented and because you are only going to be launching the sheet from your ContentView,
+     you can provide that binding by way of a State variable.
+    * We will now define a state variable `modalIsPresented` to know when the sheet should be presented. By default we will keep the value of this state variable as `false`.
+    * We will turn modalIsPresented value as true on pressing `+` button on navigation bar.
+
+```swift
+   @State var modalIsPresented = false
+```
+We will add more UI elements to our first view. First embed your list inside a NavigationView and add trailing and leading navigation bar buttons as follows:
+```swift
+   NavigationView {
+        List {
+            ForEach(noteStore.notes) { index in
+              Text(note.name)
+            }
+        }
+      .navigationBarTitle("Notes")
+      .navigationBarItems(
+        leading: EditButton(),
+        trailing:
+          Button(
+            action: { self.modalIsPresented = true }
+          ) {
+            Image(systemName: "plus")
+          }
+      )
+    }
+```
+
+As the NavigationView is all setup, you can now add a sheet by searching `sheet` in the modifier tab on Library. You can easily drag the `sheet` on your canvas.
+```swift
+   .sheet(isPresented: $modalIsPresented) {
+      NoteDetail()
+   }
+```
