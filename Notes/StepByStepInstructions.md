@@ -24,11 +24,12 @@ A model is a way to structure data, so that you can work inside your app's code 
 
 * Next you need to organize your models into groups
 * For that you need to make sure that your `Note.swift` is inside the yellow `Notes` folder first
-    * If it isn't, drag it there in the **Project Navigator**
+  * If it isn't, drag it there in the **Project Navigator**
 * Right-click on `Note.swift` and select **New Group from Selection**
 * That will enclose it in a folder, which we can name `Models`
 
 We will be using structures inside `Note.swift` to represent our `Note` model. Add the following code inside of `Note.swift`:
+
 ```swift
 struct Note {
     var content: String
@@ -36,6 +37,7 @@ struct Note {
     let dateCreated = Date()
 }
 ```
+
 > Every note needs a title and content, both of which should be changeable, so a variable (var) of type String is the way to go. 
 
 So this represents a note, but this app is going to store as many notes as you want. Now you will need a place to keep track of all of those notes and that, too, is going to be a model.
@@ -48,6 +50,7 @@ So this represents a note, but this app is going to store as many notes as you w
     3. Name the file `NoteStore.swift`
 
 The Notes app is going to have one NoteStore, but you will need to use it across several screens, so NoteStore will be a reference type (class), rather than a struct. Add the following to `NoteStore.swift`:
+
 ```swift
 import Combine
 
@@ -59,11 +62,12 @@ class NoteStore: ObservableObject {
         ].map { Note(content: $0, title: $0) }
 }
 ```
+
 > Here, we created a variable array named `notes` as a property of NoteStore and pre-populated it with three Strings. We then used `map` closure to transform our Strings into Notes.
 >
 > We also imported the **Combine** framework, conformed to **ObservableObject**, and marked our notes as **Published**. This is all so that we can use our NoteStore later as an **Environment Object**. Read more about Environment Objects [here](https://www.hackingwithswift.com/quick-start/swiftui/whats-the-difference-between-observedobject-state-and-environmentobject), and read more about Observable Objects [here](https://www.hackingwithswift.com/quick-start/swiftui/observable-objects-environment-objects-and-published).
 
-Now, with our notes ready we will take advantage of SwiftUI to create an interface. We will be using a List to display the content. 
+Now, with our notes ready we will take advantage of SwiftUI to create an interface. We will be using a List to display the content.
 
 ### Displaying notes
 
@@ -72,10 +76,11 @@ A **List** is a container which displays your data in a column, with a row for e
 1. Open `ContentView.swift`
     * At the moment, this file is still fresh from the template, with only a `Hello World` TextView
 2. Command-click on `Text("Hello World")`, and choose `Embed in List`
-   
+
 ![Embed In List](/Assets/MarkdownAssets/EmbedInList.png)
 
 At this point, our list of notes is ready to be displayed, we just need access to our NoteStore. Define the following var as the first line in the `ContentView` struct:
+
 ```swift
 @EnvironmentObject var noteStore: NoteStore
 ```
@@ -94,6 +99,7 @@ Now, everything should compile alright. We'll need to do this for any `View` in 
 
 When we use `List` or `ForEach` to make dynamic views, SwiftUI needs to know how it can identify each item *uniquely*, otherwise it’s not able to compare view hierarchies to figure out what has changed.
 To accomplish this, modify the `Note` structure in `Note.swift` to make it conform to the **Identifiable** protocol, like this:
+
 ```swift
 struct Note: Identifiable {
     let id = UUID()
@@ -110,6 +116,7 @@ struct Note: Identifiable {
 > Notes are now guaranteed to be uniquely identifiable, and we won't need to tell our `ForEach` loop which property to use for the identifier – it knows there will be a unique `id`. You can read more about this [here](https://www.hackingwithswift.com/quick-start/swiftui/how-to-create-views-in-a-loop-using-foreach).
 
 As a result of this change we can use the following code to display our list of notes. Modify the `List` code in `ContentView.swift` to match the following:
+
 ```swift
 List {
     ForEach(noteStore.notes) { note in
@@ -156,7 +163,7 @@ NavigationView {
 To add new notes, we will be need a new SwiftUI file called `NoteDetail.swift`.
 
 * First, put `ContentView.swift` into a new group, called `Views`
-    * We can do this by right-clicking on `ContentView.swift`, and selecting `New Group from Selection`
+  * We can do this by right-clicking on `ContentView.swift`, and selecting `New Group from Selection`
 * Create a SwiftUI file `AddNoteView.swift` inside of `Views`
 
 Now, add the following vars at the beginning of the `AddNoteView` struct:
@@ -226,8 +233,8 @@ There's a bit going on here, so let's break it down.
 * We use `navigationBarItems(trailing:)` to add a button to the navigation bar, at the trailing (normally, right) edge
 * Our button has the text "Add"
 * The `Button`'s closure defines its functionality
-    * It adds a new `Note` to the `noteStore` with the given `text` and `title`
-    * It also uses the `presentationMode` variable to dismiss the current screen once it saves
+  * It adds a new `Note` to the `noteStore` with the given `text` and `title`
+  * It also uses the `presentationMode` variable to dismiss the current screen once it saves
 * `.disabled(text.isEmpty || title.isEmpty)` disables the "Add" button until the note is non-empty
 
 Nice, let's take care of some final aesthetic changes and be on our way. We'll be adding some padding around our views, and making the nav bar a little smaller.
@@ -274,7 +281,7 @@ NavigationView {
 This should look familiar. We're adding another nav bar item, but this time it's a `NavigationLink`.
 
 * A `NavigationLink` is a button that triggers a navigation presentation when pressed
-    * Our destination is a new `AddNoteView`
+  * Our destination is a new `AddNoteView`
 * Our `NavigationLink`'s content is a "+" image
 
 ### Testing it out, part 2
@@ -313,7 +320,7 @@ NavigationView {
 
 * The `.onDelete` modifier only exists on `ForEach`, so if we want users to delete items from a list we must put the items inside a `ForEach`
 * The closure removes the note at the index that is being deleted
-    * Since we modify the `noteStore`, and the `noteStore` is an EnvironmentObject, any views that rely on it will be updated, including the `ContentView`
+  * Since we modify the `noteStore`, and the `noteStore` is an EnvironmentObject, any views that rely on it will be updated, including the `ContentView`
 
 We can add a similar closure, as well as a leading navigation bar item, to handle editing the list rows.
 
@@ -342,11 +349,11 @@ NavigationView {
 ```
 
 * We added a leading `EditButton()` to our navigation bar
-    * This is a special kind of `Button` that toggles the edit mode on/off for the current scope, in this case our `List`
-    * Edit mode for a list is the state in which you can delete individual items, or rearrange them
+  * This is a special kind of `Button` that toggles the edit mode on/off for the current scope, in this case our `List`
+  * Edit mode for a list is the state in which you can delete individual items, or rearrange them
 * We added the `.onMove` closure that will run whenever a row is moved
-    * The closure moves the specified rows from `sourceIndices` to the rows beginning at `destinationIndex`
-    * Again, since SwiftUI is watching our state, this change to `noteStore` are reflected in our UI
+  * The closure moves the specified rows from `sourceIndices` to the rows beginning at `destinationIndex`
+  * Again, since SwiftUI is watching our state, this change to `noteStore` are reflected in our UI
 
 ### Testing it out, part 3
 
