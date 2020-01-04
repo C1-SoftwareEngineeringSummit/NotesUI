@@ -122,8 +122,6 @@ List {
 }
 ```
 
-***
-
 ### Testing it out, part 1
 
 Now would be a good time to run the project to make sure everything is working properly. But before we do that, we need to provide our views with the `NoteStore` environment object! This is done via `SceneDelegate.swift`. Open that file, and in the first function, replace `let contentView = ContentView()` with the following:
@@ -137,6 +135,8 @@ let contentView = ContentView().environmentObject(NoteStore())
 *Now* we can build and run the project. Click the "play" button in the upper left. If everything went well, it should look something like this.
 
 ![Our first test!](/Assets/MarkdownAssets/first_test.png)
+
+***
 
 ### Adding a NavigationView
 
@@ -281,22 +281,84 @@ This should look familiar. We're adding another nav bar item, but this time it's
     * Our destination is a new `AddNoteView`
 * Our `NavigationLink`'s content is a "+" image
 
-***
-
 ### Testing it out, part 2
 
 Now would be a good time to test our app again! Build and run, and you should be able to add new notes to your list.
 
 ![Our second test!](/Assets/MarkdownAssets/second_test.png)
 
+***
+
 ### Deleting and rearranging notes
 
+What if we mess up while writing one of our notes? Right now, that's it. But it's not hard to fix, all we need to do is tell our List what to do when a user tries to delete an element. Again, we will be modifying `ContentView.swift`.
 
+```swift
+NavigationView {
+    List {
+        ForEach(noteStore.notes) { note in
+            Text(note.title)
+        }
+        .onDelete { atIndexSet in
+            self.noteStore.notes.remove(atOffsets: atIndexSet)
+        }
+    }
+    .navigationBarTitle("Notes")
+    .navigationBarItems(
+        trailing:
+        NavigationLink(destination: AddNoteView()) {
+            Image(systemName: "plus")
+        }
+    )
+}
+```
 
+* When a user swipes from right to left on a row, the `.onDelete` closure will run
+* The closure removes the note at the index that is being deleted
+    * Since we modify the `noteStore`, and the `noteStore` is an EnvironmentObject, any views that rely on it will be updated, including the `ContentView`
 
+We can add a similar closure, as well as a leading navigation bar item, to handle editing the list rows.
 
+```swift
+NavigationView {
+    List {
+        ForEach(noteStore.notes) { note in
+            RowView(note: note)
+        }
+        .onDelete { atIndexSet in
+            self.noteStore.notes.remove(atOffsets: atIndexSet)
+        }
+        .onMove { sourceIndices, destinationIndex in
+            self.noteStore.notes.move(fromOffsets: sourceIndices, toOffset: destinationIndex)
+        }
+    }
+    .navigationBarTitle("Notes")
+    .navigationBarItems(
+        leading: EditButton(),
+        trailing:
+        NavigationLink(destination: AddNoteView()) {
+            Image(systemName: "plus")
+        }
+    )
+}
+```
 
+* We added a leading `EditButton()` to our navigation bar
+    * This is a special kind of `Button` that toggles the edit mode on/off for the current scope, in this case our `List`
+    * Edit mode for a list is the state in which you can delete individual items, or rearrange them
+* We added the `.onMove` closure that will run whenever a row is moved
+    * The closure moves the specified rows from `sourceIndices` to the rows beginning at `destinationIndex`
+    * Again, since SwiftUI is watching our state, this change to `noteStore` are reflected in our UI
 
+### Testing it out, part 3
+
+Let's test this out once more. You should finally be able to get rid of your notes!
+
+![Our third test!](/Assets/MarkdownAssets/third_test.png)
+
+***
+
+### Editing existing notes
 
 
 
