@@ -134,9 +134,7 @@ let contentView = ContentView().environmentObject(NoteStore())
 
 *Now* we can build and run the project. Click the "play" button in the upper left. If everything went well, it should look something like this.
 
-<img src="/Assets/MarkdownAssets/first_test.png" width=300/>
-
-![Our first test!](/Assets/MarkdownAssets/first_test.png)
+<img src="/Assets/MarkdownAssets/first_test.png" width=400/>
 
 ***
 
@@ -287,7 +285,7 @@ This should look familiar. We're adding another nav bar item, but this time it's
 
 Now would be a good time to test our app again! Build and run, and you should be able to add new notes to your list.
 
-![Our second test!](/Assets/MarkdownAssets/second_test.png)
+<img src="/Assets/MarkdownAssets/second_test.png" width=400/>
 
 ***
 
@@ -358,7 +356,7 @@ NavigationView {
 
 Let's test this out once more. You should finally be able to get rid of your notes!
 
-![Our third test!](/Assets/MarkdownAssets/third_test.png)
+<img src="/Assets/MarkdownAssets/third_test.png" width=400/>
 
 ***
 
@@ -460,6 +458,6 @@ RowView(note: note)
 
 We should be just about good at this point. Build and run your project once more to see if you're able to click on an existing note and edit its contents.
 
-![Our fourth test!](/Assets/MarkdownAssets/fourth_test.png)
+<img src="/Assets/MarkdownAssets/fourth_test.png" width=400/>
 
 ***
