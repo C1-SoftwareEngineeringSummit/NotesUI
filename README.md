@@ -165,5 +165,24 @@ Button("Add") {
 	self.presentationMode.wrappedValue.dismiss()
 ```
 
+## Deleting from the List
+SwiftUI gives us the onDelete() modifier for us to use to control how objects should be deleted from a collection.
+In practice, this is almost exclusively used with List and ForEach: we create a list of rows that are shown using ForEach, then attach onDelete() to that ForEach so the user can remove rows they don’t want.
+   
+* The onDelete() modifier only exists on ForEach, so if we want users to delete items from a list we must put the items inside a ForEach.
+ 
+```swift
+    .onDelete { atIndexSet in
+        self.noteStore.notes.remove(atOffsets: atIndexSet)
+            }
+```
+   > Given how easy that was. We can also add an Edit/Done button to the navigation bar, that lets users delete several rows more easily.
+```swift
+    .navigationBarItems(
+        leading: EditButton()
+    )
+```
+
+
 To be continued...
 
