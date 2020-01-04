@@ -60,6 +60,7 @@
 		B4B492E123B50FCD00A47DEA /* AddNoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNoteView.swift; sourceTree = "<group>"; };
 		B4B492E423BBBAF300A47DEA /* RowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowView.swift; sourceTree = "<group>"; };
 		B4B492E623BBBB5400A47DEA /* NoteEditingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteEditingView.swift; sourceTree = "<group>"; };
+		C50FAC4723C14B6F00B2E671 /* StepByStepInstructions.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = StepByStepInstructions.md; sourceTree = "<group>"; };
 		C560FE7A23BEDB5500708D56 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -111,6 +112,7 @@
 		B41BFF3423B11095003CF4A7 /* Notes */ = {
 			isa = PBXGroup;
 			children = (
+				C50FAC4723C14B6F00B2E671 /* StepByStepInstructions.md */,
 				B41BFF6723B1115D003CF4A7 /* Models */,
 				B4B492E323BBBADE00A47DEA /* Views */,
 				B41BFF3523B11095003CF4A7 /* AppDelegate.swift */,
