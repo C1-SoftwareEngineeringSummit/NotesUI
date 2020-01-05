@@ -23,7 +23,7 @@ struct RowView: View {
 struct RowView_Previews: PreviewProvider {
     static var previews: some View {
         RowView(
-            note: Note(content: "To Do", title: "To Do")
+            note: Note(title: "To Do", content: "To Do")
         )
     }
 }

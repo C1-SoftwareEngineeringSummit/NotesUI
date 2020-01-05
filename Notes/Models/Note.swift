@@ -10,7 +10,7 @@ import Foundation
 
 struct Note: Identifiable {
     let id = UUID()
-    var content: String
     var title: String
+    var content: String
     let dateCreated = Date()
 }

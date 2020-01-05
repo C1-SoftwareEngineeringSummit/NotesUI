@@ -26,3 +26,8 @@ As you've probably noticed by now, when you close the app and re-open it, all of
 * [Core Data](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/CoreData/index.html)
 * [Realm](https://realm.io/docs/swift/latest)
 * [Firebase](https://firebase.google.com/docs/ios/setup)
+
+## References
+
+* [Swift 5.1 Cheatsheet](https://koenig-media.raywenderlich.com/uploads/2020/12/RW-Swift-5.1-Cheatsheet-1.0.pdf)
+* [Apple's Swift UI Tutorials](https://developer.apple.com/tutorials/swiftui)
