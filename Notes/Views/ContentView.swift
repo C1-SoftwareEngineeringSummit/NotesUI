@@ -15,7 +15,9 @@ struct ContentView: View {
         NavigationView {
             List {
                 ForEach(noteStore.notes) { note in
-                    RowView(note: note)
+                    NavigationLink(destination: NoteView(note: note)) {
+                        NoteRow(note: note)
+                    }
                 }
                 .onDelete { atIndexSet in
                     self.noteStore.notes.remove(atOffsets: atIndexSet)
