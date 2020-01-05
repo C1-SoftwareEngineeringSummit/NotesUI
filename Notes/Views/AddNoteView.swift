@@ -24,7 +24,7 @@ struct AddNoteView: View {
         .navigationBarTitle("", displayMode: .inline)
         .navigationBarItems(trailing:
             Button("Add") {
-                self.noteStore.notes.append(Note(title: self.title, content: self.text))
+                self.noteStore.notes.insert(Note(title: self.title, content: self.text), at: 0)
                 self.presentationMode.wrappedValue.dismiss()
             }
             .disabled(text.isEmpty || title.isEmpty))

@@ -327,7 +327,7 @@ var body: some View {
     }
     .navigationBarItems(
         trailing: Button("Add") {
-            self.noteStore.notes.append(Note(content: self.text, title: self.title))
+            self.noteStore.notes.insert(Note(title: self.title, content: self.text), at: 0)
             self.presentationMode.wrappedValue.dismiss()
         }
         .disabled(text.isEmpty || title.isEmpty))
