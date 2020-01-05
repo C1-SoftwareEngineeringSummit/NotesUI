@@ -161,13 +161,9 @@ Group {
 
 If you refresh your canvas, you should now see two previews of your NoteRow view displayed with different sizes.
 
-## Using Lists
+## Using NoteRow With Our List
 
-1. Open `ContentView.swift`
-   * At the moment, this file is still fresh from the template, with only a `Hello World` TextView
-2. Command-click on `Text("Hello World")`, and choose `Embed in List`
-
-![Embed In List](/Assets/MarkdownAssets/EmbedInList.png)
+In your **Project Navigator (⌘1)** click on `ContentView.swift`
 
 At this point, our list of notes is ready to be displayed, we just need access to our `NoteStore`. Define the following var as the first line in the `ContentView` struct:
 
@@ -177,7 +173,10 @@ At this point, our list of notes is ready to be displayed, we just need access t
 
 > Remember how we made our NoteStore conform to `ObservableObject` before? We did that in order to use the **@EnvironmentObject** attribute here in our `ContentView`. An `EnvironmentObject` is a value that is available via the application itself. This means it’s shared data that every view can read/write if they want to. And because it is shared, there's no need to initialize it within `ContentView`. We'll do that elsewhere.
 
-You might get an error in `ContentView_Previews`. This is because you need to provide your preview with the environment variable that we just defined. In order to fix that, replace the `ContentView()` line in your `ContentView_Previews` struct to the following:
+We're ready to use out newly created `NoteRow`.
+
+1. Replace the default Text view with our newly finished `NoteRow` and pass the initializer a note using our `noteStore`: `NoteRow(note: noteStore.notes[0])`
+2. You should get an error in `ContentView_Previews`. This is because you need to provide your preview with the environment variable that we just defined. In order to fix that, replace the `ContentView()` line in your `ContentView_Previews` struct to the following:
 
 ```swift
 ContentView().environmentObject(NoteStore())
@@ -185,11 +184,23 @@ ContentView().environmentObject(NoteStore())
 
 Now, everything should compile alright. We'll need to do this for any `View` in which we use the `NoteStore` environment variable.
 
-***
-TODO Add Using the RowView in here....
-***
+3. Command-click on `NoteRow()`, and choose `Embed in List`
 
-### Utilizing List and ForEach
+    ![Embed In List](/Assets/MarkdownAssets/EmbedInList.png)
+
+4. Make the List span from `0 ..< 3` and update `NoteRow` to use the provided `item` closure parameter. `ContentView` should now look like this:
+
+```swift
+@EnvironmentObject var noteStore: NoteStore
+
+var body: some View {
+    List(0 ..< 3) { item in
+        NoteRow(note: self.noteStore.notes[item])
+    }
+}
+```
+
+### Creating a Dynamic List with ForEach
 
 When we use `List` or `ForEach` to make dynamic views, SwiftUI needs to know how it can identify each item *uniquely*, otherwise it’s not able to compare view hierarchies to figure out what has changed.
 
@@ -215,7 +226,7 @@ As a result of this change we can use the following code to display our list of 
 ```swift
 List {
     ForEach(noteStore.notes) { note in
-        Text(note.title)
+        NoteRow(note: note)
     }
 }
 ```
@@ -246,7 +257,7 @@ In `ContentView.swift`, wrap the `List` block in a `NavigationView`, and give th
 NavigationView {
     List {
         ForEach(noteStore.notes) { note in
-            Text(note.title)
+            NoteRow(note: note)
         }
     }
     .navigationBarTitle("Notes")
@@ -255,7 +266,7 @@ NavigationView {
 
 ### Taking new notes
 
-To add new notes, we will be need a new SwiftUI file called `NoteDetail.swift`.
+To add new notes, we will be need a new SwiftUI file called `AddNoteView.swift`.
 
 * Create a new SwiftUI file called `AddNoteView.swift` inside the `Views` group.
 
@@ -264,8 +275,8 @@ Now, add the following vars at the beginning of the `AddNoteView` struct:
 ```swift
 @EnvironmentObject var noteStore: NoteStore
 @Environment(\.presentationMode) var presentationMode
-@State var text = "Enter a note here"
 @State var title = ""
+@State var text = "Enter a note here"
 ```
 
 > The `noteStore` should look familiar, it's the same **EnvironmentObject** we used before.
@@ -350,7 +361,7 @@ var body: some View {
 }
 ```
 
-#### Navigating to our new screen
+### Navigating to our new screen
 
 Now we have a beautiful new view, but no way of accessing it. Let's open up `ContentView.swift` and get to work.
 
@@ -358,7 +369,7 @@ Now we have a beautiful new view, but no way of accessing it. Let's open up `Con
 NavigationView {
     List {
         ForEach(noteStore.notes) { note in
-            Text(note.title)
+            RowView(note: note)
         }
     }
     .navigationBarTitle("Notes")
@@ -460,7 +471,7 @@ Let's test this out once more. You should finally be able to get rid of your not
 
 The last major thing we need to take care of is editing the content of existing notes. Right now, if you click on any row in the List, nothing will happen. Let's start by creating a new `View` that will allow us to edit our notes.
 
-1. Create a new SwiftUI file inside of the `Views` group and name it `EditNoteView.swift`
+1. Create a new SwiftUI file inside of the `Views` group and name it `NoteView.swift`
 2. Start by adding the following two variables at the top of the struct
 
 ```swift
@@ -484,7 +495,7 @@ var noteIndex: Int {
 >
 > We'll use this value later on in our view's `body`.
 
-4. Replace the `body` of our `EditNoteView` with the following code.
+4. Replace the `body` of our `NoteView` with the following code.
 
 ```swift
 VStack {
@@ -502,16 +513,30 @@ VStack {
 
 #### Fixing our preview
 
-Your preview for `EditNoteView` shouldn't work at this point. If you remember from before, we need to give our `EditNoteView` a `NoteStore` environment variable. However, this view also needs a `Note` to edit. However, that `Note` needs to exist in the `NoteStore` that you provide to the preview. Replace `static var previews` with the following.
+Your preview for `NoteView` shouldn't work at this point. If you remember from before, we need to give our `NoteView` a `NoteStore` environment variable. However, this view also needs a `Note` to edit. However, that `Note` needs to exist in the `NoteStore` that you provide to the preview. Replace `static var previews` with the following.
 
 ```swift
 static var previews: some View {
     let noteStore = NoteStore()
-    return EditNoteView(note: noteStore.notes[0]).environmentObject(noteStore)
+    return NoteView(note: noteStore.notes[0]).environmentObject(noteStore)
 }
 ```
 
 > This creates a NoteStore, and passes the first Note at index 0 to the preview. It also sets the evironment object to the same NoteStore.
+
+### Adding Navigation to Our NoteView
+
+Head back to `ContentView.swift` so we can Navigation to our newly crated view.
+
+Inside `ForEach`'s closure, wrap the returned row in a `NavigationLink`, specifying the `NoteView` view as the destination like so:
+
+```swift
+ForEach(noteStore.notes) { note in
+    NavigationLink(destination: NoteView(note: note)) {
+        NoteRow(note: note)
+    }
+}
+```
 
 ### Testing it out, part 4
 

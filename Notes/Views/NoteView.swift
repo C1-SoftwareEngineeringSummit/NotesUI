@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct NoteEditingView: View {
+struct NoteView: View {
     @EnvironmentObject var noteStore: NoteStore
     var note: Note
 
@@ -30,6 +30,6 @@ struct NoteEditingView: View {
 struct TaskEditingView_Previews: PreviewProvider {
     static var previews: some View {
         let noteStore = NoteStore()
-        return NoteEditingView(note: noteStore.notes[0]).environmentObject(noteStore)
+        return NoteView(note: noteStore.notes[0]).environmentObject(noteStore)
     }
 }
