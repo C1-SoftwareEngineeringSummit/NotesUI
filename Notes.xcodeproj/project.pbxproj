@@ -137,11 +137,11 @@
 		B4B492E323BBBADE00A47DEA /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				B41BFF3923B11095003CF4A7 /* ContentView.swift */,
 				B4B492E123B50FCD00A47DEA /* AddNoteView.swift */,
+				B41BFF3923B11095003CF4A7 /* ContentView.swift */,
+				C56A04D123C24B9D003136C0 /* NoteRow.swift */,
 				B4B492E623BBBB5400A47DEA /* NoteView.swift */,
 				C560FE7A23BEDB5500708D56 /* TextView.swift */,
-				C56A04D123C24B9D003136C0 /* NoteRow.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -458,7 +458,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = CapitalOne.Notes;
+				PRODUCT_BUNDLE_IDENTIFIER = com.capitalone.ses.notesui;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -479,7 +479,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = CapitalOne.Notes;
+				PRODUCT_BUNDLE_IDENTIFIER = com.capitalone.ses.notesui;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
