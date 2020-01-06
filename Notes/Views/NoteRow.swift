@@ -10,11 +10,12 @@ import SwiftUI
 
 struct NoteRow: View {
     var note: Note
+    
     var body: some View {
         HStack {
             Text(note.title)
             Spacer()
-            Text(note.dateCreated.description)
+            Text(shortDateFormatter.string(from: note.dateCreated))
         }.padding()
     }
 }
