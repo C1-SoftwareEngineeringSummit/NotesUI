@@ -89,7 +89,7 @@ let genericGreeting = {
 print(genericGreeting())
 
 // closures can have parameters and return types
-let customGreeting: (String) -> (String) { person in 
+let customGreeting: (String) -> (String) = { person in 
     return "Hello, \(person)"
 }
 print(customGreeting("Newton")
