@@ -54,10 +54,10 @@
 		B41BFF6823B111E7003CF4A7 /* NoteStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteStore.swift; sourceTree = "<group>"; };
 		B4B492E123B50FCD00A47DEA /* AddNoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNoteView.swift; sourceTree = "<group>"; };
 		B4B492E623BBBB5400A47DEA /* NoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteView.swift; sourceTree = "<group>"; };
-		C50FAC4723C14B6F00B2E671 /* StepByStepInstructions.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = StepByStepInstructions.md; sourceTree = "<group>"; };
 		C560FE7A23BEDB5500708D56 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
 		C56A04D123C24B9D003136C0 /* NoteRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteRow.swift; sourceTree = "<group>"; };
 		C5C633AC23C2B2F70021FBCF /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		C5C633F323C2BF4B0021FBCF /* StepByStepInstructions.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = StepByStepInstructions.md; path = "../NotesUI-Starter/StepByStepInstructions.md"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +88,7 @@
 		B41BFF2923B11095003CF4A7 = {
 			isa = PBXGroup;
 			children = (
+				C5C633F323C2BF4B0021FBCF /* StepByStepInstructions.md */,
 				B41BFF3423B11095003CF4A7 /* Notes */,
 				B41BFF3323B11095003CF4A7 /* Products */,
 			);
@@ -106,7 +107,6 @@
 		B41BFF3423B11095003CF4A7 /* Notes */ = {
 			isa = PBXGroup;
 			children = (
-				C50FAC4723C14B6F00B2E671 /* StepByStepInstructions.md */,
 				B41BFF6723B1115D003CF4A7 /* Models */,
 				B4B492E323BBBADE00A47DEA /* Views */,
 				B41BFF3523B11095003CF4A7 /* AppDelegate.swift */,

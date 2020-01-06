@@ -116,7 +116,7 @@ Check out your work in the Canvas to make sure everything is working. You might 
 * Start by embedding the Text view in an `HStack`
   * Command click on the Text view and select the "Embed in HStack" option.
 
-![Embed In HStack](/Assets/MarkdownAssets/EmbedInHStack.png)
+![Embed In HStack](../MarkdownAssets/EmbedInHStack.png)
 
 * Modify the Text view to use the `note` property's `title` like so: `Text(note.title)`
 * Add a `Spacer` view and another `Text` view below the current Text view
@@ -188,7 +188,7 @@ Now, everything should compile alright. We'll need to do this for any `View` in 
 
 3. Command-click on `NoteRow()`, and choose `Embed in List`
 
-    ![Embed In List](/Assets/MarkdownAssets/EmbedInList.png)
+    ![Embed In List](../MarkdownAssets/EmbedInList.png)
 
 4. Make the List span from `0 ..< 3` and update `NoteRow` to use the provided `item` closure parameter. `ContentView` should now look like this:
 
@@ -245,7 +245,7 @@ let contentView = ContentView().environmentObject(NoteStore())
 
 *Now* we can build and run the project. Click the "play" button in the upper left. If everything went well, it should look something like this.
 
-<img src="/Assets/MarkdownAssets/first_test.png" width=400/>
+<img src="../MarkdownAssets/first_test.png" width=400/>
 
 ***
 
@@ -394,7 +394,7 @@ This should look familiar. We're adding another nav bar item, but this time it's
 
 Now would be a good time to test our app again! Build and run, and you should be able to add new notes to your list.
 
-<img src="/Assets/MarkdownAssets/second_test.png" width=400/>
+<img src="../MarkdownAssets/second_test.png" width=400/>
 
 ***
 
@@ -465,7 +465,7 @@ NavigationView {
 
 Let's test this out once more. You should finally be able to get rid of your notes!
 
-<img src="/Assets/MarkdownAssets/third_test.png" width=400/>
+<img src="../MarkdownAssets/third_test.png" width=400/>
 
 ***
 
@@ -544,6 +544,6 @@ ForEach(noteStore.notes) { note in
 
 We should be just about good at this point. Build and run your project once more to see if you're able to click on an existing note and edit its contents.
 
-<img src="/Assets/MarkdownAssets/fourth_test.png" width=400/>
+<img src="../MarkdownAssets/fourth_test.png" width=400/>
 
 ***

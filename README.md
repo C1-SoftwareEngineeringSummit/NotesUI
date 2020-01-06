@@ -8,11 +8,9 @@ This project has been updated to work with iOS 13, Xcode 11, and Swift 5.1.
 
 ## Content
 
-In this repo, you'll find the end result of the NotesUI App. 
+In this repo, you'll find two versions of the NotesUI App: a starter project and the completed project.
 
-Please refer to the [Step By Step Instructions](Notes/StepByStepInstructions.md) for detailed instructions on building this app. During the workshop you can use these instructions to follow along.
-
-You can find the starter project here: `INSERT GIT LINK HERE`
+To get started, open the `NotesUI-Starter.xcodeproj` file located in the `NotesUI-Starter` directory. Please refer to the [Step By Step Instructions](NotesUI-Starter/StepByStepInstructions.md) for detailed instructions on building this app. During the workshop you can use these instructions to follow along.
 
 ## Bonus Functionality
 
