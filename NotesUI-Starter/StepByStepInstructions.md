@@ -1,6 +1,6 @@
 # Step By Step Instructions
 
-SwiftUI is a **declarative** framework for building applications for Apple devices. This means that instead of using Storyboards or programmatically generating your interface, you can use the simplicity of the SwiftUI framework.
+SwiftUI is a **declarative** framework for building applications for Apple devices. This means that instead of using Storyboards or programmatically generating your interface, you can use the simplicity of the SwiftUI framework. After years of using UIKit and AppKit to create user interfaces, SwiftUI presents a fresh, new way to create UI for your apps.
 
 ## Initial Project Setup
 
@@ -47,7 +47,7 @@ So this represents a note, but this app is going to store as many notes as you w
 * Create a new Swift file which we will use to declare our `NoteStore` model
     1. Right-click on the Models folder and select `New File...` again
     2. Select **Swift File**
-    3. Name the file `NoteStore.swift`
+    3. Name the file `NoteStore`
 
 The Notes app is going to have one NoteStore, but you will need to use it across several screens, so NoteStore will be a reference type (class), rather than a struct. Add the following to `NoteStore.swift`:
 
@@ -63,11 +63,13 @@ class NoteStore: ObservableObject {
 }
 ```
 
-> Here, we created a variable array named `notes` as a property of `NoteStore` and pre-populated it with three Strings. We then used `map` with it's closure syntax to transform our Strings into Notes.
+> Here, we created a variable array named `notes` as a property of type `NoteStore` and pre-populated it with three Strings. We then used `map` with it's closure syntax to transform our Strings into Notes.
 >
 > We also imported the **Combine** framework, conformed to the **ObservableObject** protocol, and marked our notes property as **@Published**. This is all so that we can use our `NoteStore` later as an **Environment Object**. Read more about Environment Objects [here](https://www.hackingwithswift.com/quick-start/swiftui/whats-the-difference-between-observedobject-state-and-environmentobject), and read more about Observable Objects [here](https://www.hackingwithswift.com/quick-start/swiftui/observable-objects-environment-objects-and-published).
+> 
+> `ObservableObject` and `@Published` provide a general-purpose Combine publisher that you use when there isn't a more specific Combine publisher for your needs.
 
-Now, with our notes model ready we will take advantage of SwiftUI to create an interface. We will be using a List to display the content.
+Now, with our notes model ready, we can start building our UI using SwiftUI. We will be using a List to display the content.
 
 ## Displaying Notes Using a List
 
@@ -81,17 +83,21 @@ Let's start by quickly orgainzing our folder structure. Make sure you have your 
 
 * Put `ContentView.swift` into a new group, called `Views`
   * We can do this by right-clicking on `ContentView.swift`, and selecting `New Group from Selection`
-* Now create a new SwiftUI view called `NoteRow.swift` inside the Views group.
-  1. Right-click on the Views folder and select `New File...`
-  2. Select **SwiftUI View**
-  3. Name the file `NoteRow.swift`
-* In the newly created view add `note` as a stored property of `NoteRow`.
-* Since we added a new property we now have to upate the previews property of the `NoteRow_Previews` struct.
+  * Feel free to also drag the `TextView.swift` file into this new `Views` directory.
+* Now we can create a SwiftUI view called `NoteRow` inside the `Views` group.
+  1. Right-click on the `Views` folder and select `New File...`
+  2. Select the **SwiftUI View** option
+  3. Name the file `NoteRow`
+* Take a moment to explore this new view. Notice it comes with a Canvas to preview your view
+* In the newly created view add `note` as a stored property of the `NoteRow` view.
+* Since we added a new property we now have to upate the previews property of the `NoteRow_Previews` struct as well
   * Update the `NoteRow()` initializer in the previews struct to accept note as a parameter like so: `NoteRow(note: Note(title: "Note Title...", content: "Testing 1,2,3"))`
 
 Your `NoteRow.swift` file should now look like this:
 
 ```swift
+import SwiftUI
+
 struct NoteRow: View {
     var note: Note
     var body: some View {
@@ -110,19 +116,22 @@ Check out your work in the Canvas to make sure everything is working. You might 
 
 > If the Canvas is not open you can use the Option + Command + Return (`⌥ + ⌘ + ↩︎`) shortcut to display it.
 >
-> You can use the Option + Command + P (`⌥ + ⌘ + P`) shortcut to refresh your canvas view!
+> ![Display Canvas](../MarkdownAssets/DisplayCanvas.png)
+>
+> You can use the Option + Command + P (`⌥ + ⌘ + P`) shortcut to refresh your canvas.
 
-#### Building the Row Layout
+### Building the Row Layout
 
-* Start by embedding the Text view in an `HStack`
-  * Command click on the Text view and select the "Embed in HStack" option.
+1. Start by embedding the Text view in an `HStack`
+   * Command-click on the Text view and select the "Embed in HStack" option.
 
 ![Embed In HStack](../MarkdownAssets/EmbedInHStack.png)
 
-* Modify the Text view to use the `note` property's `title` like so: `Text(note.title)`
-* Add a `Spacer` view and another `Text` view below the current Text view
-  * Set the last Text view to display the date the note was creating using one of the `Date` formatters provided in the `Utilties.swift` file.
-* Finally, add the `padding()` modifier to the entire `HStack`.
+2. Modify the Text view to use the `note` property's `title` like so: `Text(note.title)`
+3. Add a `Spacer()` view below the Text view
+4. Add another `Text()` view below the Spacer view
+   * We want this Text view to display the date that the note was created on. We can use one of the `DateFormatters` provided in the `Utilties.swift` file like so: `Text(shortDateFormatter.string(from: note.dateCreated))`
+5. Finally, add the `padding()` modifier to the entire `HStack`.
 
 Your `HStack` should now look like this:
 
@@ -131,12 +140,13 @@ HStack {
     Text(note.title)
     Spacer()
     Text(shortDateFormatter.string(from: note.dateCreated))
-}.padding()
+}
+.padding()
 ```
 
 Refresh your canvas (`⌥ + ⌘ + P`) to make sure everything looks right.
 
-#### Customizing the Row Preview
+### Customizing the Row Preview
 
 You can customize the returned content from a preview provider to render exactly the previews that are most helpful to you in the Canvas. Let's play around with the `previewLayout()` modifier to create previews that actually look like rows.
 
@@ -149,9 +159,10 @@ static var previews: some View {
 }
 ```
 
-* Embed the returned row in a `Group`, and add another sample row.
-  * Command click on the `NoteRow` and select the "Group" option
-* Now add another sample of a `NoteRow()` in the newly created group:
+Now we can embed the returned row in a `Group`, and add another `NoteRow` instance to preview.
+
+* Command-click on the `NoteRow` and select the **"Group"** option
+* Now add another sample of a `NoteRow()` in the newly created group. This time change the size of the width like so:
 
 ```swift
 Group {
@@ -163,6 +174,8 @@ Group {
 ```
 
 If you refresh your canvas, you should now see two previews of your `NoteRow` view displayed using different sizes.
+
+Previewing your views is a powerful feature as it lets you see all the possibilites your view can live in. You can also use the `.environment` modifer to preview your views in Dark Mode! You can also preview your views in other platforms like the AppleTV or Apple Watch.
 
 ## Using NoteRow With Our List
 
