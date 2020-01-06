@@ -107,7 +107,9 @@ struct NoteRow_Previews: PreviewProvider {
 
 Check out your work in the Canvas to make sure everything is working. You might have to refresh the canvas by pressing the "Resume" button located on the top of the canvas.
 
-> TIP: You can use the (`CMD + Option + P`) shortcut to rebuild your canvas view!
+> If the Canvas is not open you can use the Option + Command + Return (`⌥ + ⌘ + ↩︎`) shortcut to display it.
+>
+> You can use the Option + Command + P (`⌥ + ⌘ + P`) shortcut to refresh your canvas view!
 
 #### Building the Row Layout
 
@@ -118,7 +120,7 @@ Check out your work in the Canvas to make sure everything is working. You might 
 
 * Modify the Text view to use the `note` property's `title` like so: `Text(note.title)`
 * Add a `Spacer` view and another `Text` view below the current Text view
-  * Set the text view to display the notes date.
+  * Set the last Text view to display the date the note was creating using one of the `Date` formatters provided in the `Utilties.swift` file.
 * Finally, add the `padding()` modifier to the entire `HStack`.
 
 Your `HStack` should now look like this:
@@ -127,17 +129,17 @@ Your `HStack` should now look like this:
 HStack {
     Text(note.title)
     Spacer()
-    Text(note.dateCreated.description)
+    Text(shortDateFormatter.string(from: note.dateCreated))
 }.padding()
 ```
 
-Refresh your canvas (`CMD + Option + P`) to make sure everything looks right.
+Refresh your canvas (`⌥ + ⌘ + P`) to make sure everything looks right.
 
 #### Customizing the Row Preview
 
 You can customize the returned content from a preview provider to render exactly the previews that are most helpful to you in the Canvas. Let's play around with the `previewLayout()` modifier to create previews that actually look like rows.
 
-* In the `NoteRow_Previews` struct, add the `.previewLayout()` modifier to the `previews` property to set it to a fixed size:
+* In the `NoteRow_Previews` struct, add the `.previewLayout()` modifier to the `previews` property to set it to a fixed size like so:
 
 ```swift
 static var previews: some View {
@@ -159,7 +161,7 @@ Group {
 }
 ```
 
-If you refresh your canvas, you should now see two previews of your NoteRow view displayed with different sizes.
+If you refresh your canvas, you should now see two previews of your `NoteRow` view displayed using different sizes.
 
 ## Using NoteRow With Our List
 
