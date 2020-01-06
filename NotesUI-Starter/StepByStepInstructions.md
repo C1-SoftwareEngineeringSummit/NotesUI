@@ -18,12 +18,12 @@ A note is going to be what we call a data model or more simply, a model.
 A model is a way to structure data, so that you can work inside your app's code and have a type that represents a real-world concept, like a note.
 
 * Go to **Project Navigator (⌘1)** and add a new file to the project
-  1. Right-click on the **yellow** Notes folder, and select `New File...`
+  1. Right-click on the **yellow** NotesUI-Starter folder, and select `New File...`
   2. Use the standard **Swift File** option then hit next
   3. You are going to define a type that will represent a note, so name your file `Note`
   4. Click `Create`
 * Next lets organize a bit and create a folder where our Models will live
-  * For that you need to make sure that your `Note.swift` is inside the yellow `Notes` folder first
+  * For that you need to make sure that your `Note.swift` is inside the yellow `NotesUI-Starter` folder first
   * If it isn't, drag it there in the **Project Navigator (⌘1)**
 * Right-click on `Note.swift` and select **New Group from Selection**
 * That will enclose it in a folder, which we can name `Models`
@@ -59,7 +59,7 @@ class NoteStore: ObservableObject {
         "SES iOS Workshop Notes",
         "SES Android Workshop Notes",
         "Note 3..."
-        ].map { Note(content: $0, title: $0) }
+        ].map { Note(title: $0, content: $0) }
 }
 ```
 
