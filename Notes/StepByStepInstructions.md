@@ -390,7 +390,7 @@ This should look familiar. We're adding another nav bar item, but this time it's
   * Our destination is a new `AddNoteView`
 * Our `NavigationLink`'s content is a "+" image
 
-### Testing it out, part 2
+### Testing it out, Part 2
 
 Now would be a good time to test our app again! Build and run, and you should be able to add new notes to your list.
 
@@ -459,9 +459,9 @@ NavigationView {
   * Edit mode for a list is the state in which you can delete individual items, or rearrange them
 * We added the `.onMove` closure that will run whenever a row is moved
   * The closure moves the specified rows from `sourceIndices` to the rows beginning at `destinationIndex`
-  * Again, since SwiftUI is watching our state, this change to `noteStore` are reflected in our UI
+  * Again, since SwiftUI is watching our state, this change to `noteStore` is reflected in our UI
 
-### Testing it out, part 3
+### Testing it out, Part 3
 
 Let's test this out once more. You should finally be able to get rid of your notes!
 
@@ -528,7 +528,7 @@ static var previews: some View {
 
 ### Adding Navigation to Our NoteView
 
-Head back to `ContentView.swift` so we can Navigation to our newly crated view.
+Head back to `ContentView.swift` so we can navigate to our newly crated view.
 
 Inside `ForEach`'s closure, wrap the returned row in a `NavigationLink`, specifying the `NoteView` view as the destination like so:
 
@@ -540,7 +540,7 @@ ForEach(noteStore.notes) { note in
 }
 ```
 
-### Testing it out, part 4
+### Testing it out, Part 4
 
 We should be just about good at this point. Build and run your project once more to see if you're able to click on an existing note and edit its contents.
 
