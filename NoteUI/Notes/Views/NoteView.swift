@@ -1,5 +1,5 @@
 //
-//  NoteEditingView.swift
+//  NoteView.swift
 //  Notes
 //
 //  Created by Arshad, Fatima on 12/31/19.
@@ -27,7 +27,7 @@ struct NoteView: View {
     }
 }
 
-struct TaskEditingView_Previews: PreviewProvider {
+struct NoteView_Previews: PreviewProvider {
     static var previews: some View {
         let noteStore = NoteStore()
         return NoteView(note: noteStore.notes[0]).environmentObject(noteStore)
