@@ -31,8 +31,8 @@ We will be using structures inside `Note.swift` to represent our `Note` model. A
 
 ```swift
 struct Note {
-    var content: String
     var title: String
+    var content: String
     let dateCreated = Date()
 }
 ```
@@ -85,8 +85,8 @@ Let's start by quickly orgainzing our folder structure. Make sure you have your 
   2. Select **SwiftUI View**
   3. Name the file `NoteRow.swift`
 * In the newly created view add `note` as a stored property of `NoteRow`.
-* Since we added a new property we now how to upate the previews property of the `NoteRow_Previews` struct.
-  * Update the `NoteRow()` initializer in the previews struct to accept note as a parameter like so: `NoteRow(note: Note(title: "Hello World!", content: "Testing 1,2,3"))`
+* Since we added a new property we now have to upate the previews property of the `NoteRow_Previews` struct.
+  * Update the `NoteRow()` initializer in the previews struct to accept note as a parameter like so: `NoteRow(note: Note(title: "Note Title...", content: "Testing 1,2,3"))`
 
 Your `NoteRow.swift` file should now look like this:
 
@@ -175,7 +175,7 @@ At this point, our list of notes is ready to be displayed, we just need access t
 
 > Remember how we made our NoteStore conform to `ObservableObject` before? We did that in order to use the **@EnvironmentObject** attribute here in our `ContentView`. An `EnvironmentObject` is a value that is available via the application itself. This means it’s shared data that every view can read/write if they want to. And because it is shared, there's no need to initialize it within `ContentView`. We'll do that elsewhere.
 
-We're ready to use out newly created `NoteRow`.
+We're ready to use our newly created `NoteRow`.
 
 1. Replace the default Text view with our newly finished `NoteRow` and pass the initializer a note using our `noteStore`: `NoteRow(note: noteStore.notes[0])`
 2. You should get an error in `ContentView_Previews`. This is because you need to provide your preview with the environment variable that we just defined. In order to fix that, replace the `ContentView()` line in your `ContentView_Previews` struct to the following:
@@ -283,7 +283,7 @@ Now, add the following vars at the beginning of the `AddNoteView` struct:
 
 > The `noteStore` should look familiar, it's the same **EnvironmentObject** we used before.
 >
-> You can alt-click on `presentationMode` to see that it's a binding to a presentationMode instance. We'll get into bindings later. However, `@Environment(\.presentationMode) var presentationMode` is very similar to `@EnvironmentObject`, but it is accessing a global environment that is already populated by SwiftUI with system-wide settings. We will use this later to dismiss our view.
+> You can ⌥ + click on `presentationMode` to see that it's a binding to a presentationMode instance. We'll get into bindings later. However, `@Environment(\.presentationMode) var presentationMode` is very similar to `@EnvironmentObject`, but it is accessing a global environment that is already populated by SwiftUI with system-wide settings. We will use this later to dismiss our view.
 >
 > The last two variables are marked `@State`. This means that these vars will be stored by SwiftUI in special internal memory. These vars can be bound to `View`s in our `AddNoteView`, and as soon as the value of a `@State` property changes, SwiftUI will rebuild the `View` to accommodate these changes.
 >
@@ -312,7 +312,7 @@ VStack {
 }
 ```
 
-> We wrap everything in a `VStack`. As you might have guessed, this allows us to stack views vertically. There is also an `HStack`, for stacking horizontally.
+> We wrap everything in a `VStack`. As you might have guessed, this allows us to stack views vertically.
 >
 > If you're interested in the implementation of the `TextView`, look at `TextView.swift`.
 
@@ -339,7 +339,7 @@ There's a bit going on here, so let's break it down.
 * We use `navigationBarItems(trailing:)` to add a button to the navigation bar, at the trailing (normally, right) edge
 * Our button has the text "Add"
 * The `Button`'s closure defines its functionality
-  * It adds a new `Note` to the `noteStore` with the given `text` and `title`
+  * It adds a new `Note` to the beginning of the `noteStore` with the given `text` and `title`
   * It also uses the `presentationMode` variable to dismiss the current screen once it saves
 * `.disabled(text.isEmpty || title.isEmpty)` disables the "Add" button until the note is non-empty
 
