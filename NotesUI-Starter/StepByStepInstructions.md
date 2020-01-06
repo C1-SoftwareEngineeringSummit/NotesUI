@@ -5,7 +5,7 @@ SwiftUI is a **declarative** framework for building applications for Apple devi
 ## Initial Project Setup
 
 1. Open Terminal, and navigate to the directory in which you want to save this project
-2. Run the following command in Terminal: `git clone <INSERT GIT LINK HERE>`
+2. Run the following command in Terminal: `git clone https://github.com/C1-SoftwareEngineeringSummit/NotesUI.git`
     * This will clone our starter project into your file system
 3. Navigate into the newly created folder using the following command: `cd NotesUI`
 4. Navigate to the starter project folder using: `cd NotesUI-Starter`
