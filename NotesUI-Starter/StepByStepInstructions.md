@@ -8,8 +8,9 @@ SwiftUI is a **declarative** framework for building applications for Apple devi
 2. Run the following command in Terminal: `git clone <INSERT GIT LINK HERE>`
     * This will clone our starter project into your file system
 3. Navigate into the newly created folder using the following command: `cd NotesUI`
-4. Open the starter project in the latest version of Xcode using the command: `xed .`
-    * You can also double-click the `Notes.xcodeproj` file in Finder
+4. Navigate to the starter project folder using: `cd NotesUI-Starter`
+5. Open the starter project in the latest version of Xcode using the command: `xed .`
+    * You can also double-click the `NotesUI-Starter.xcodeproj` file in Finder
   
 ## Setting Up Our Model
 
