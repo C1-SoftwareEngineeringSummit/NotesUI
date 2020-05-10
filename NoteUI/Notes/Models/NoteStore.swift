@@ -10,10 +10,8 @@ import Combine
 
 class NoteStore: ObservableObject {
     @Published var notes = [
-        "Pay the electricity bill",
-        "Get my car washed",
-        "Made assignment"
-        ].map { Note(title: $0, content: $0) }
+        Note(title: "butter"),
+        Note(title: "milk"),
+        Note(title: "eggs")
+    ]
 }
-
-

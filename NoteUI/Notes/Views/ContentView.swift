@@ -9,37 +9,41 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var noteStore: NoteStore
+    @ObservedObject var noteStore = NoteStore()
 
     var body: some View {
         NavigationView {
             List {
                 ForEach(noteStore.notes) { note in
-                    NavigationLink(destination: NoteView(note: note)) {
-                        NoteRow(note: note)
+                    // Adding the NavigationLink/NoteView will be bonus work
+                    NavigationLink(destination: NoteView(noteStore: self.noteStore, note: note)) {
+                        NoteRow(noteStore: self.noteStore, note: note)
                     }
                 }
+                // Adding onDelete will be bonus work (?)
                 .onDelete { atIndexSet in
                     self.noteStore.notes.remove(atOffsets: atIndexSet)
                 }
+                // Adding onMove will be bonus work
                 .onMove { sourceIndices, destinationIndex in
                     self.noteStore.notes.move(fromOffsets: sourceIndices, toOffset: destinationIndex)
                 }
             }
             .navigationBarTitle("Notes")
             .navigationBarItems(
+                // Adding the EditButton will be bonus work
                 leading: EditButton(),
-                trailing:
-                NavigationLink(destination: AddNoteView()) {
+                trailing: Button(action: {
+                    self.noteStore.notes.insert(Note(), at: 0)
+                }) {
                     Image(systemName: "plus")
-                }
-            )
+            })
         }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView().environmentObject(NoteStore())
+        ContentView()
     }
 }

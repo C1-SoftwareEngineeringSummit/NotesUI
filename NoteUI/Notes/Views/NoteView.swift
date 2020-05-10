@@ -8,28 +8,31 @@
 
 import SwiftUI
 
+// This whole view will be part of the bonus work
 struct NoteView: View {
-    @EnvironmentObject var noteStore: NoteStore
-    var note: Note
+    @ObservedObject var noteStore: NoteStore
+    let note: Note
 
-    var noteIndex: Int {
-        noteStore.notes.firstIndex(where: { $0.id == note.id }) ?? 0
+    private var index: Int? {
+        return noteStore.notes.firstIndex(where: { noteInStore in
+            return noteInStore.id == note.id
+        })
     }
 
     var body: some View {
-        VStack {
-            TextField("Enter a title here", text: $noteStore.notes[noteIndex].title)
-                .font(.title)
-            TextView(text: $noteStore.notes[noteIndex].content)
+        if let i = index {
+            return AnyView(TextView(text: $noteStore.notes[i].content)
+                .padding()
+                .navigationBarTitle(noteStore.notes[i].title))
+        } else {
+            return AnyView(EmptyView())
         }
-        .padding()
-        .navigationBarTitle("", displayMode: .inline)
     }
 }
 
 struct NoteView_Previews: PreviewProvider {
     static var previews: some View {
         let noteStore = NoteStore()
-        return NoteView(note: noteStore.notes[0]).environmentObject(noteStore)
+        return NoteView(noteStore: noteStore, note: noteStore.notes[0])
     }
 }
