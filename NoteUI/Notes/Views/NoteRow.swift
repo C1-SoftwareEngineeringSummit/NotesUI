@@ -9,32 +9,33 @@
 import SwiftUI
 
 struct NoteRow: View {
-    @ObservedObject var noteStore: NoteStore
+    @Binding var notes: [Note]
     let note: Note
 
-    private var index: Int? {
-        return noteStore.notes.firstIndex(where: { noteInStore in
-            return noteInStore.id == note.id
-        })
+    private var index: Int {
+        return notes.firstIndex(where: { noteInList in
+            return noteInList.id == note.id
+        }) ?? 0
     }
 
     var body: some View {
-        // This is the only way i could keep the app from crashing (due to index out of bounds exceptions) when deleting notes
-        if let i = index {
-            return AnyView(TextField("take a note", text: $noteStore.notes[i].title))
-        } else {
-            return AnyView(EmptyView())
-        }
+        return TextField("take a note", text: $notes[index].title)
     }
 }
 
 struct NoteRow_Previews: PreviewProvider {
     static var previews: some View {
-        let noteStore = NoteStore()
+        let notes = [
+            Note(title: "butter"),
+            Note(title: "milk"),
+            Note(title: "eggs")
+        ]
         return Group {
-            NoteRow(noteStore: noteStore, note: noteStore.notes[0])
+            // We use .constant() to create a binding with an immutable value
+            // that is used to insert data for the preview
+            NoteRow(notes: .constant(notes), note: notes[0])
                 .previewLayout(.fixed(width: 300, height: 70))
-            NoteRow(noteStore: noteStore, note: noteStore.notes[1])
+            NoteRow(notes: .constant(notes), note: notes[1])
                 .previewLayout(.fixed(width: 414, height: 70))
         }
     }

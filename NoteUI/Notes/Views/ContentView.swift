@@ -9,32 +9,28 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject var noteStore = NoteStore()
+    // We can change this to [Note]() if we want to
+    // The initial list is useful to see in the preview
+    @State var notes = [
+        Note(title: "butter"),
+        Note(title: "milk"),
+        Note(title: "eggs")
+    ]
 
     var body: some View {
         NavigationView {
             List {
-                ForEach(noteStore.notes) { note in
+                ForEach(notes) { note in
                     // Adding the NavigationLink/NoteView will be bonus work
-                    NavigationLink(destination: NoteView(noteStore: self.noteStore, note: note)) {
-                        NoteRow(noteStore: self.noteStore, note: note)
+                    NavigationLink(destination: NoteView(notes: self.$notes, note: note)) {
+                        NoteRow(notes: self.$notes, note: note)
                     }
-                }
-                // Adding onDelete will be bonus work (?)
-                .onDelete { atIndexSet in
-                    self.noteStore.notes.remove(atOffsets: atIndexSet)
-                }
-                // Adding onMove will be bonus work
-                .onMove { sourceIndices, destinationIndex in
-                    self.noteStore.notes.move(fromOffsets: sourceIndices, toOffset: destinationIndex)
                 }
             }
             .navigationBarTitle("Notes")
             .navigationBarItems(
-                // Adding the EditButton will be bonus work
-                leading: EditButton(),
                 trailing: Button(action: {
-                    self.noteStore.notes.insert(Note(), at: 0)
+                    self.notes.insert(Note(), at: 0)
                 }) {
                     Image(systemName: "plus")
             })
