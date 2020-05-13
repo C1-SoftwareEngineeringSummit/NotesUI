@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+// We will provide this pre-built to the students
 struct TextView: UIViewRepresentable {
     @Binding var text: String
 
