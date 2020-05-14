@@ -178,9 +178,9 @@ var body: some View {
 ```
 Here, we are "hard coding" the number of rows we want to show.  Let's instead use the size of our notes array to determine how many `NoteRow`s to create.
 
-### Creating a Dynamic List with ForEach
+### Creating a Dynamic List
 
-When we use `List` or `ForEach` to make dynamic views, SwiftUI needs to know how it can identify each item *uniquely*, otherwise it’s not able to compare view hierarchies to figure out what has changed.
+When we use `List` to make dynamic views, SwiftUI needs to know how it can identify each item *uniquely*, otherwise it’s not able to compare view hierarchies to figure out what has changed.
 
 To accomplish this, modify the `Note` structure in `Note.swift` to make it conform to the **Identifiable** protocol, like this:
 
@@ -196,15 +196,13 @@ struct Note: Identifiable {
 >
 > Our `id` is a **UUID**, which is short for Universally Unique Identifier. You can read more about that [here](https://developer.apple.com/documentation/foundation/uuid).
 >
-> Notes are now guaranteed to be uniquely identifiable, and we won't need to tell our `ForEach` loop which property to use for the identifier – it knows there will be a unique `id`. You can read more about this [here](https://www.hackingwithswift.com/quick-start/swiftui/how-to-create-views-in-a-loop-using-foreach).
+> Notes are now guaranteed to be uniquely identifiable, and we won't need to tell our `List` loop which property to use for the identifier – it knows there will be a unique `id`. You can read more about this [here](https://www.hackingwithswift.com/quick-start/swiftui/how-to-create-views-in-a-loop-using-foreach).
 
 As a result of this change we can use the following code to display our list of notes. Modify the `List` code in `ContentView.swift` to match the following:
 
 ```swift
-List {
-    ForEach(notes.indices, id: \.self) { index in
-        NoteRow(notes: self.$notes, index: index)
-    }
+List(notes.indices, id: \.self) { index in
+    NoteRow(notes: self.$notes, index: index)
 }
 ```
 
@@ -216,10 +214,8 @@ In `ContentView.swift`, wrap the `List` block in a `NavigationView`, and give th
 
 ```swift
 NavigationView {
-    List {
-        ForEach(notes.indices, id: \.self) { index in
-            NoteRow(notes: self.$notes, index: index)
-        }
+    List(notes.indices, id: \.self) { index in
+        NoteRow(notes: self.$notes, index: index)
     }
     .navigationBarTitle("Notes")
 }
