@@ -22,11 +22,6 @@ A model is a way to structure data, so that you can work inside your app's code 
   2. Use the standard **Swift File** option then hit next
   3. You are going to define a type that will represent a note, so name your file `Note`
   4. Click `Create`
-* Next lets organize a bit and create a folder where our Models will live
-  * For that you need to make sure that your `Note.swift` is inside the yellow `NotesUI-Starter` folder first
-  * If it isn't, drag it there in the **Project Navigator (⌘1)**
-* Right-click on `Note.swift` and select **New Group from Selection**
-* That will enclose it in a folder, which we can name `Models`
 
 We will be using structures inside `Note.swift` to represent our `Note` model. Add the following code inside of `Note.swift`:
 
@@ -34,11 +29,10 @@ We will be using structures inside `Note.swift` to represent our `Note` model. A
 struct Note {
     var title: String
     var content: String
-    let dateCreated = Date()
 }
 ```
 
-> Every note needs a title and content, both of which should be changeable, so a variable (var) of type `String` is the way to go.
+> Every note needs a title which should be changeable, so a variable (var) of type `String` is the way to go.
 
 So this represents a note, but this app is going to store as many notes as you want. Now you will need a place to keep track of all of those notes and that, too, is going to be a model.
 
@@ -79,19 +73,16 @@ A **List** is a container which displays your data in a column, with a row for e
 
 ### Creating A Row View
 
-Let's start by quickly orgainzing our folder structure. Make sure you have your **Project Navigator (⌘1)** open.
-
-* Put `ContentView.swift` into a new group, called `Views`
-  * We can do this by right-clicking on `ContentView.swift`, and selecting `New Group from Selection`
-  * Feel free to also drag the `TextView.swift` file into this new `Views` directory.
-* Now we can create a SwiftUI view called `NoteRow` inside the `Views` group.
+* Let's start by creating a SwiftUI view called `NoteRow`.
   1. Right-click on the `Views` folder and select `New File...`
   2. Select the **SwiftUI View** option
   3. Name the file `NoteRow`
 * Take a moment to explore this new view. Notice it comes with a Canvas to preview your view
-* In the newly created view add `note` as a stored property of the `NoteRow` view.
-* Since we added a new property we now have to upate the previews property of the `NoteRow_Previews` struct as well
-  * Update the `NoteRow()` initializer in the previews struct to accept note as a parameter like so: `NoteRow(note: Note(title: "Note Title...", content: "Testing 1,2,3"))`
+* In the newly created view add `notes: [Note]` as a stored property of the `NoteRow` view.  This will be our full list of notes.
+* Since we want each row to only show a single note element from the array, add an `index` property which specifies which note to show in the row.
+* Since we added a new property we now have to update the previews property of the `NoteRow_Previews` struct as well
+  * Add an array of `Note`s: `static let notes = [Note(title: "Note title...", content: "Note content...")]`
+  * Update the `NoteRow()` initializer in the previews struct to accept notes and index as a parameter like so: `NoteRow(notes: .constant(notes), index: 0)`
 
 Your `NoteRow.swift` file should now look like this:
 
@@ -99,15 +90,18 @@ Your `NoteRow.swift` file should now look like this:
 import SwiftUI
 
 struct NoteRow: View {
-    var note: Note
+    var notes: [Note]
+    let index: Int
+
     var body: some View {
         Text("Hello, World!")
     }
 }
 
 struct NoteRow_Previews: PreviewProvider {
+    static let notes = [Note(title: "Note title...", content: "Note content...")]
     static var previews: some View {
-        NoteRow(note: Note(title: "Note Title...", content: "Testing 1,2,3"))
+        NoteRow(notes: notes, index: 0)
     }
 }
 ```
@@ -122,29 +116,25 @@ Check out your work in the Canvas to make sure everything is working. You might 
 
 ### Building the Row Layout
 
-1. Start by embedding the Text view in an `HStack`
-   * Command-click on the Text view and select the "Embed in HStack" option.
+1. Start by adding a Text Field.
+2. When creating the TextField, the first parameter is the default text to show when the TextField is empty, and the second parameter is the String object to maintain the current TextField's content.  We'll use the `notes` property with the index to get a specific `Note`, then use the `title` like so: `TextField("Enter note title", text: notes[index].title)`
+3. You'll notice the following error:
+`Cannot convert value of type 'String' to expected argument type 'Binding<String>'`
+In SwiftUI, when we want to _bind_ a property to a TextField (when one changes, the other will also be updated), we should add the @Binding property wrapper.
+4. Add the @Binding property wrapper to the notes property, then use the binding using the `$` prefix.
 
-![Embed In HStack](../MarkdownAssets/EmbedInHStack.png)
-
-2. Modify the Text view to use the `note` property's `title` like so: `Text(note.title)`
-3. Add a `Spacer()` view below the Text view
-4. Add another `Text()` view below the Spacer view
-   * We want this Text view to display the date that the note was created on. We can use one of the `DateFormatters` provided in the `Utilties.swift` file like so: `Text(shortDateFormatter.string(from: note.dateCreated))`
-5. Finally, add the `padding()` modifier to the entire `HStack`.
-
-Your `HStack` should now look like this:
+Your `NoteRow` should now look like this:
 
 ```swift
-HStack {
-    Text(note.title)
-    Spacer()
-    Text(shortDateFormatter.string(from: note.dateCreated))
-}
-.padding()
-```
+struct NoteRow: View {
+    @Binding var notes: [Note]
+    let index: Int
 
-Refresh your canvas (`⌥ + ⌘ + P`) to make sure everything looks right.
+    var body: some View {
+        return TextField("take a note", text: $notes[index].title)
+    }
+}
+```
 
 ### Customizing the Row Preview
 
@@ -153,27 +143,13 @@ You can customize the returned content from a preview provider to render exactly
 * In the `NoteRow_Previews` struct, add the `.previewLayout()` modifier to the `previews` property to set it to a fixed size like so:
 
 ```swift
-static var previews: some View {
-    NoteRow(note: Note(title: "Note Title...", content: "Testing 1,2,3"))
-        .previewLayout(.fixed(width: 300, height: 70))
+struct NoteRow_Previews: PreviewProvider {
+    static let notes = [Note(title: "Note title...", content: "Note content...")]
+    static var previews: some View {
+        NoteRow(notes: .constant(notes), index: 0).previewLayout(.fixed(width: 300, height: 70))
+    }
 }
 ```
-
-Now we can embed the returned row in a `Group`, and add another `NoteRow` instance to preview.
-
-* Command-click on the `NoteRow` and select the **"Group"** option
-* Now add another sample of a `NoteRow()` in the newly created group. This time change the size of the width like so:
-
-```swift
-Group {
-    NoteRow(note: Note(title: "Note Title...", content: "Testing 1,2,3"))
-        .previewLayout(.fixed(width: 300, height: 70))
-    NoteRow(note: Note(title: "2nd Note Title...", content: "Testing 1,2,3"))
-        .previewLayout(.fixed(width: 414, height: 70))
-}
-```
-
-If you refresh your canvas, you should now see two previews of your `NoteRow` view displayed using different sizes.
 
 Previewing your views is a powerful feature as it lets you see all the possibilites your view can live in. You can also use the `.environment` modifer to preview your views in Dark Mode! You can also preview your views in other platforms like the AppleTV or Apple Watch.
 
@@ -181,37 +157,43 @@ Previewing your views is a powerful feature as it lets you see all the possibili
 
 In your **Project Navigator (⌘1)** click on `ContentView.swift`
 
-At this point, our list of notes is ready to be displayed, we just need access to our `NoteStore`. Define the following var as the first line in the `ContentView` struct:
+At this point, we are ready to show a list of notes by using the NoteRow we created multiple times. Define an array of notes including some default notes using the following var as the first line in the `ContentView` struct:
 
 ```swift
-@EnvironmentObject var noteStore: NoteStore
+@State var notes: [Note] = [
+    Note(title: "iOS is awesome", content: "It's true"),
+    Note(title: "SES is awesome", content: "It's true")
+]
 ```
-
-> Remember how we made our NoteStore conform to `ObservableObject` before? We did that in order to use the **@EnvironmentObject** attribute here in our `ContentView`. An `EnvironmentObject` is a value that is available via the application itself. This means it’s shared data that every view can read/write if they want to. And because it is shared, there's no need to initialize it within `ContentView`. We'll do that elsewhere.
 
 We're ready to use our newly created `NoteRow`.
 
-1. Replace the default Text view with our newly finished `NoteRow` and pass the initializer a note using our `noteStore`: `NoteRow(note: noteStore.notes[0])`
-2. You should get an error in `ContentView_Previews`. This is because you need to provide your preview with the environment variable that we just defined. In order to fix that, replace the `ContentView()` line in your `ContentView_Previews` struct to the following:
+1. Replace the default Text view with our newly finished `NoteRow` and pass the initializer a note using our array:
 
 ```swift
-ContentView().environmentObject(NoteStore())
+struct ContentView: View {
+    @State var notes: [Note] = [
+        Note(title: "iOS is awesome", content: "It's true"),
+        Note(title: "SES is awesome", content: "It's true")
+    ]
+    var body: some View {
+        NoteRow(notes: $notes, index: 0)
+    }
+}
 ```
 
-Now, everything should compile alright. We'll need to do this for any `View` in which we use the `NoteStore` environment variable.
+As expected, only a single NoteRow is shown.  Now we want to show a NoteRow for each Note in the array.
 
-3. Command-click on `NoteRow()`, and choose `Embed in List`
+2. Command-click on `NoteRow()`, and choose `Embed in List`
 
     ![Embed In List](../MarkdownAssets/EmbedInList.png)
 
-4. Make the List span from `0 ..< 3` and update `NoteRow` to use the provided `item` closure parameter. `ContentView` should now look like this:
+4. Make the List span from `0 ..< 2` and update `NoteRow` to use the provided `item` closure parameter. `ContentView` should now look like this:
 
 ```swift
-@EnvironmentObject var noteStore: NoteStore
-
 var body: some View {
-    List(0 ..< 3) { item in
-        NoteRow(note: self.noteStore.notes[item])
+    List(0 ..< 2) { item in
+        NoteRow(notes: self.$notes, index: item)
     }
 }
 ```
@@ -246,16 +228,6 @@ List {
     }
 }
 ```
-
-### Testing it out, Part 1
-
-Now would be a good time to run the project to make sure everything is working properly. But before we do that, we need to provide our views with the `NoteStore` environment object! This is done via `SceneDelegate.swift`. Open that file, and in the first function, replace `let contentView = ContentView()` with the following:
-
-```swift
-let contentView = ContentView().environmentObject(NoteStore())
-```
-
-> This will set the `NoteStore` environment object for our `ContentView` (and all of its subviews) to use.
 
 *Now* we can build and run the project. Click the "play" button in the upper left. If everything went well, it should look something like this.
 

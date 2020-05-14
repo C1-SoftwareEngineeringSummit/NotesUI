@@ -11,13 +11,7 @@ import SwiftUI
 // This whole view will be part of the bonus work
 struct NoteView: View {
     @Binding var notes: [Note]
-    let note: Note
-
-    private var index: Int {
-        return notes.firstIndex(where: { noteInStore in
-            return noteInStore.id == note.id
-        }) ?? 0
-    }
+    let index: Int
 
     var body: some View {
         return TextView(text: $notes[index].content)
@@ -35,6 +29,6 @@ struct NoteView_Previews: PreviewProvider {
         ]
         // We use .constant() to create a binding with an immutable value
         // that is used to insert data for the preview
-        return NoteView(notes: .constant(notes), note: notes[0])
+        return NoteView(notes: .constant(notes), index: 0)
     }
 }
