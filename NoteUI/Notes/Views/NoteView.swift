@@ -14,8 +14,7 @@ struct NoteView: View {
     let index: Int
 
     var body: some View {
-        return TextView(text: $notes[index].content)
-            .padding()
+        TextView(text: $notes[index].content)
             .navigationBarTitle(notes[index].title)
     }
 }

@@ -20,7 +20,7 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             List {
-                ForEach(notes.indices) { index in
+                ForEach(notes.indices, id: \.self) { index in
                     // Adding the NavigationLink/NoteView will be bonus work
                     NavigationLink(destination: NoteView(notes: self.$notes, index: index)) {
                         NoteRow(notes: self.$notes, index: index)

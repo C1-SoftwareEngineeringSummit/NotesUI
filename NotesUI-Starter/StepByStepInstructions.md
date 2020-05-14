@@ -120,7 +120,7 @@ Check out your work in the Canvas to make sure everything is working. You might 
 2. When creating the TextField, the first parameter is the default text to show when the TextField is empty, and the second parameter is the String object to maintain the current TextField's content.  We'll use the `notes` property with the index to get a specific `Note`, then use the `title` like so: `TextField("Enter note title", text: notes[index].title)`
 3. You'll notice the following error:
 `Cannot convert value of type 'String' to expected argument type 'Binding<String>'`
-In SwiftUI, when we want to _bind_ a property to a TextField (when one changes, the other will also be updated), we should add the @Binding property wrapper.
+In SwiftUI, a **binding** creates a two-way connection between the `TextView` and a property marked with the  `@Binding` property wrapper. User interaction with the `TextField` changes the value of `title`, and programmatically changing `title` causes the `TextField` to update its state.
 4. Add the @Binding property wrapper to the notes property, then use the binding using the `$` prefix.
 
 Your `NoteRow` should now look like this:
@@ -131,7 +131,7 @@ struct NoteRow: View {
     let index: Int
 
     var body: some View {
-        return TextField("take a note", text: $notes[index].title)
+        TextField("take a note", text: $notes[index].title)
     }
 }
 ```
@@ -209,7 +209,6 @@ struct Note: Identifiable {
     let id = UUID()
     var content: String
     var title: String
-    let dateCreated = Date()
 }
 ```
 
@@ -223,17 +222,11 @@ As a result of this change we can use the following code to display our list of 
 
 ```swift
 List {
-    ForEach(noteStore.notes) { note in
-        NoteRow(note: note)
+    ForEach(notes.indices, id: \.self) { index in
+        NoteRow(notes: self.$notes, index: index)
     }
 }
 ```
-
-*Now* we can build and run the project. Click the "play" button in the upper left. If everything went well, it should look something like this.
-
-<img src="../MarkdownAssets/first_test.png" width=400/>
-
-***
 
 ### Adding a NavigationView
 
@@ -244,108 +237,52 @@ In `ContentView.swift`, wrap the `List` block in a `NavigationView`, and give th
 ```swift
 NavigationView {
     List {
-        ForEach(noteStore.notes) { note in
-            NoteRow(note: note)
+        ForEach(notes.indices, id: \.self) { index in
+            NoteRow(notes: self.$notes, index: index)
         }
     }
     .navigationBarTitle("Notes")
 }
 ```
 
-### Taking new notes
+### Viewing the full note
 
-To add new notes, we will be need a new SwiftUI file called `AddNoteView.swift`.
+To this point, we can only see and edit the title of each note.  We will need to create a new view to see and edit the content of a note.
 
-* Create a new SwiftUI file called `AddNoteView.swift` inside the `Views` group.
+* Create a new SwiftUI file called `NoteView.swift`.
 
-Now, add the following vars at the beginning of the `AddNoteView` struct:
+Just like in the NoteRow, we'll add the following two vars at the beginning of the `NoteView` struct:
 
 ```swift
-@EnvironmentObject var noteStore: NoteStore
-@Environment(\.presentationMode) var presentationMode
-@State var title = ""
-@State var text = "Enter a note here"
+@Binding var notes: [Note]
+let index: Int
 ```
 
-> The `noteStore` should look familiar, it's the same **EnvironmentObject** we used before.
->
-> You can ⌥ + click on `presentationMode` to see that it's a binding to a presentationMode instance. We'll get into bindings later. However, `@Environment(\.presentationMode) var presentationMode` is very similar to `@EnvironmentObject`, but it is accessing a global environment that is already populated by SwiftUI with system-wide settings. We will use this later to dismiss our view.
->
-> The last two variables are marked `@State`. This means that these vars will be stored by SwiftUI in special internal memory. These vars can be bound to `View`s in our `AddNoteView`, and as soon as the value of a `@State` property changes, SwiftUI will rebuild the `View` to accommodate these changes.
->
-> This is definitely a complicated topic, so be sure to read more about it [here](https://swiftwithmajid.com/2019/06/12/understanding-property-wrappers-in-swiftui/).
-
-Now, use a TextFiled as its body to start:
+Now, use a `TextView` (similar to a `TextField`, but supports multiple lines of text) to bind the note's `content` to the body:
 
 ```swift
 var body: some View {
-    TextField("Enter a title here", text: $title)
-        .font(.title)
+    TextView(text: $notes[index].content)
 }
 ```
 
-> A `TextField` allows users to enter text. "Enter a title here" is our placeholder text, and `$title` is a **binding**. A **binding** creates a two-way connection between the `TextView` and the `@State var title`. User interaction with the `TextField` changes the value of `title`, and programmatically changing `title` causes the `TextField` to update its state.
->
-> `.font(.title)` styles the font of this `TextField` to that of a title.
-
-However, we need more than a title for our note! Let's also add a `TextView` that will allow our users to enter a note's body, and bind that `TextView` to our `text` state var.
-
-```swift
-VStack {
-    TextField("Enter a title here", text: $title)
-        .font(.title)
-    TextView(text: $text)
-}
-```
-
-> We wrap everything in a `VStack`. As you might have guessed, this allows us to stack views vertically.
->
-> If you're interested in the implementation of the `TextView`, look at `TextView.swift`.
-
-At this point, you can give a new note a title, and a body, but there's still no way to save it! Let's fix that.
+Let's also add the note's title in the navigation bar's title:
 
 ```swift
 var body: some View {
-    VStack {
-        TextField("Enter a title here", text: $title)
-            .font(.title)
-        TextView(text: $text)
+    TextView(text: $notes[index].content)
+        .navigationBarTitle(notes[index].title)
+}
+```
+
+Lastly, let's setup the `NoteView_Previews` similarly to our NoteRow:
+
+```swift
+struct NoteView_Previews: PreviewProvider {
+    static let notes = [Note(title: "Note title...", content: "Note content...")]
+    static var previews: some View {
+        NoteView(notes: .constant(notes), index: 0)
     }
-    .navigationBarItems(
-        trailing: Button("Add") {
-            self.noteStore.notes.insert(Note(title: self.title, content: self.text), at: 0)
-            self.presentationMode.wrappedValue.dismiss()
-        }
-        .disabled(text.isEmpty || title.isEmpty))
-}
-```
-
-There's a bit going on here, so let's break it down.
-
-* We use `navigationBarItems(trailing:)` to add a button to the navigation bar, at the trailing (normally, right) edge
-* Our button has the text "Add"
-* The `Button`'s closure defines its functionality
-  * It adds a new `Note` to the beginning of the `noteStore` with the given `text` and `title`
-  * It also uses the `presentationMode` variable to dismiss the current screen once it saves
-* `.disabled(text.isEmpty || title.isEmpty)` disables the "Add" button until the note is non-empty
-
-Nice, let's take care of some final aesthetic changes and be on our way. We'll be adding some padding around our views, and making the nav bar a little smaller.
-
-```swift
-var body: some View {
-    VStack {
-        TextField("Enter a title here", text: $title)
-            .font(.title)
-        TextView(text: $text)
-    }
-    .padding()
-    .navigationBarTitle("", displayMode: .inline)
-    .navigationBarItems(
-        trailing: Button("Add") {
-            self.noteStore.notes.append(Note(content: self.text, title: self.title))
-            self.presentationMode.wrappedValue.dismiss()
-        }
-        .disabled(text.isEmpty || title.isEmpty))
 }
 ```
 
@@ -354,35 +291,33 @@ var body: some View {
 Now we have a beautiful new view, but no way of accessing it. Let's open up `ContentView.swift` and get to work.
 
 ```swift
-NavigationView {
-    List {
-        ForEach(noteStore.notes) { note in
-            RowView(note: note)
-        }
-    }
-    .navigationBarTitle("Notes")
-    .navigationBarItems(
-        trailing:
-        NavigationLink(destination: AddNoteView()) {
-            Image(systemName: "plus")
-        }
-    )
+NavigationLink(destination: NoteView(notes: self.$notes, index: index)) {
+    NoteRow(notes: self.$notes, index: index)
 }
 ```
-
-This should look familiar. We're adding another nav bar item, but this time it's a `NavigationLink`.
-
-* A `NavigationLink` is a button that triggers a navigation presentation when pressed
-  * Our destination is a new `AddNoteView`
-* Our `NavigationLink`'s content is a "+" image
+We wrap our `NoteRow` in a `NavigationLink`.  A `NavigationLink` is a button that triggers a navigation presentation when pressed.  We specified that the destination of the link when pressed is our new `NoteView`.
 
 ### Testing it out, Part 2
 
-Now would be a good time to test our app again! Build and run, and you should be able to add new notes to your list.
-
-<img src="../MarkdownAssets/second_test.png" width=400/>
+<fill this in>
 
 ***
+
+### Adding new notes
+
+We can now see and edit each notes title and content.  But how can we add new notes?  We will do so by adding a plus icon button to the top right (called the "trailing") section of our navigation bar.  When tapped, we will add a new note to our notes array.
+
+```swift
+// ...
+.navigationBarTitle("Notes")
+.navigationBarItems(trailing: Button(action: {
+    self.notes.insert(Note(title: "", content: ""), at: 0)
+}) {
+    Image(systemName: "plus")
+})
+```
+
+Here we add a Button view to the trailing section of our navigation bar.  When tapped, we take action by inserting a new note with an empty title and content to the top of the array.
 
 ### Deleting and rearranging notes
 
