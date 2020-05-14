@@ -34,35 +34,6 @@ struct Note {
 
 > Every note needs a title which should be changeable, so a variable (var) of type `String` is the way to go.
 
-So this represents a note, but this app is going to store as many notes as you want. Now you will need a place to keep track of all of those notes and that, too, is going to be a model.
-
-### Creating the NoteStore model
-
-* Create a new Swift file which we will use to declare our `NoteStore` model
-    1. Right-click on the Models folder and select `New File...` again
-    2. Select **Swift File**
-    3. Name the file `NoteStore`
-
-The Notes app is going to have one NoteStore, but you will need to use it across several screens, so NoteStore will be a reference type (class), rather than a struct. Add the following to `NoteStore.swift`:
-
-```swift
-import Combine
-
-class NoteStore: ObservableObject {
-    @Published var notes = [
-        "SES iOS Workshop Notes",
-        "SES Android Workshop Notes",
-        "Note 3..."
-        ].map { Note(title: $0, content: $0) }
-}
-```
-
-> Here, we created a variable array named `notes` as a property of type `NoteStore` and pre-populated it with three Strings. We then used `map` with it's closure syntax to transform our Strings into Notes.
->
-> We also imported the **Combine** framework, conformed to the **ObservableObject** protocol, and marked our notes property as **@Published**. This is all so that we can use our `NoteStore` later as an **Environment Object**. Read more about Environment Objects [here](https://www.hackingwithswift.com/quick-start/swiftui/whats-the-difference-between-observedobject-state-and-environmentobject), and read more about Observable Objects [here](https://www.hackingwithswift.com/quick-start/swiftui/observable-objects-environment-objects-and-published).
-> 
-> `ObservableObject` and `@Published` provide a general-purpose Combine publisher that you use when there isn't a more specific Combine publisher for your needs.
-
 Now, with our notes model ready, we can start building our UI using SwiftUI. We will be using a List to display the content.
 
 ## Displaying Notes Using a List
@@ -74,7 +45,7 @@ A **List** is a container which displays your data in a column, with a row for e
 ### Creating A Row View
 
 * Let's start by creating a SwiftUI view called `NoteRow`.
-  1. Right-click on the `Views` folder and select `New File...`
+  1. Right-click on the `NotesUI-Starter` folder and select `New File...`
   2. Select the **SwiftUI View** option
   3. Name the file `NoteRow`
 * Take a moment to explore this new view. Notice it comes with a Canvas to preview your view
@@ -157,7 +128,7 @@ Previewing your views is a powerful feature as it lets you see all the possibili
 
 In your **Project Navigator (⌘1)** click on `ContentView.swift`
 
-At this point, we are ready to show a list of notes by using the NoteRow we created multiple times. Define an array of notes including some default notes using the following var as the first line in the `ContentView` struct:
+At this point, we are ready to show multiple notes by using multiple `NoteRow`s.  Define an array of notes including two default notes using the following var as the first line in the `ContentView` struct:
 
 ```swift
 @State var notes: [Note] = [
@@ -174,7 +145,7 @@ We're ready to use our newly created `NoteRow`.
 struct ContentView: View {
     @State var notes: [Note] = [
         Note(title: "iOS is awesome", content: "It's true"),
-        Note(title: "SES is awesome", content: "It's true")
+        Note(title: "SES is awesome", content: "It's also true")
     ]
     var body: some View {
         NoteRow(notes: $notes, index: 0)
@@ -197,6 +168,7 @@ var body: some View {
     }
 }
 ```
+Here, we are "hard coding" the number of rows we want to show.  Let's instead use the size of our notes array to determine how many `NoteRow`s to create.
 
 ### Creating a Dynamic List with ForEach
 
