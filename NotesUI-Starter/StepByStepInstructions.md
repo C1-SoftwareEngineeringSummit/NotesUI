@@ -46,7 +46,7 @@ struct Note {
 
 > Every note needs a title which should be changeable, so a variable (var) of type `String` is the way to go.
 
-Now, with our notes model ready, we can start building our UI using SwiftUI. We will start by building the UI for an individual row that will be show on the summary screen.  Then, we will use that UI element to show each note in a list.
+Now, with our notes model ready, we can start building our UI using SwiftUI. We will start by building the UI for an individual row that will be shown on the summary screen.  Then, we will use that UI element to show each note in a list.
 
 ## Displaying a Note in a Row
 
@@ -295,7 +295,7 @@ We specified that the destination of the link when pressed is our new `NoteDetai
 
 ### Adding new notes
 
-We can now see and edit each notes title and content.  But how can we add new notes?  We will do so by adding a plus icon button to the top right (called the "trailing") section of our navigation bar.  When tapped, we will add a new note to our notes array.
+We can now see and edit each notes title and content.  But how can we add new notes?  We will do so by adding a "New"" button to the top right (called the "trailing") section of our navigation bar.  When tapped, we will add a new note to our notes array.
 
 ```swift
 // ...
