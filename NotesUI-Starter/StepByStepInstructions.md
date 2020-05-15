@@ -10,7 +10,9 @@ The summary screen will allow the user to add a new note, change the title of a 
 
 The detail screen will allow the user to view and edit the selected note's content.
 
-<insert screen shots>
+![Summary Screen](../MarkdownAssets/finished_summary.png)
+
+![Detail Screen](../MarkdownAssets/finished_detail.png)
 
 ## Initial Project Setup
 
@@ -316,8 +318,7 @@ We specified that the destination of the link when pressed is our new `NoteDetai
 ### Testing it out, Part 2
 
 <fill this in>
-add steps about running on simulator?
-youll notice it added the arrows to denote that each cell now navigates to a new screen
+<youll notice it added the arrows to denote that each cell now navigates to a new screen>
 
 ***
 
