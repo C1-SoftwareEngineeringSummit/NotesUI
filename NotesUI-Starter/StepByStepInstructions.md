@@ -2,6 +2,16 @@
 
 SwiftUI is a **declarative** framework for building applications for Apple devices. This means that instead of using Storyboards or programmatically generating your interface, you can use the simplicity of the SwiftUI framework. After years of using UIKit and AppKit to create user interfaces, SwiftUI presents a fresh, new way to create UI for your apps.
 
+## Project Description
+
+Today we will be building an iOS application that will allow Software Engineering Summit participants to take notes on each class throughout the week.  The app will include two main screens: one screen that lists the titles of all notes (summary screen), and one screen that allows the user to view the content of an individual note (detail screen).
+
+The summary screen will allow the user to add a new note, change the title of a note, and navigate to view the note's content.
+
+The detail screen will allow the user to view and edit the selected note's content.
+
+<insert screen shots>
+
 ## Initial Project Setup
 
 1. Open Terminal, and navigate to the directory in which you want to save this project
@@ -26,6 +36,8 @@ A model is a way to structure data, so that you can work inside your app's code 
 We will be using structures inside `Note.swift` to represent our `Note` model. Add the following code inside of `Note.swift`:
 
 ```swift
+import Foundation
+
 struct Note {
     var title: String
     var content: String
@@ -34,9 +46,9 @@ struct Note {
 
 > Every note needs a title which should be changeable, so a variable (var) of type `String` is the way to go.
 
-Now, with our notes model ready, we can start building our UI using SwiftUI. We will be using a List to display the content.
+Now, with our notes model ready, we can start building our UI using SwiftUI. We will start by building the UI for an individual row that will be show on the master screen.  Then, we will use that UI element to show each note in a list.
 
-## Displaying Notes Using a List
+## Displaying a Note in a Row
 
 A **List** is a container which displays your data in a column, with a row for each entry. This is the structure we will use to organize all our notes. Before we dive further into Lists, we need to create a view that will represent each row of our list.
 
@@ -48,12 +60,12 @@ A **List** is a container which displays your data in a column, with a row for e
   1. Right-click on the `NotesUI-Starter` folder and select `New File...`
   2. Select the **SwiftUI View** option
   3. Name the file `NoteRow`
-* Take a moment to explore this new view. Notice it comes with a Canvas to preview your view
-* In the newly created view add `notes: [Note]` as a stored property of the `NoteRow` view.  This will be our full list of notes.
-* Since we want each row to only show a single note element from the array, add an `index` property which specifies which note to show in the row.
+* Take a moment to explore this new view. It includes a body View property that contains a single Text property.  Notice it comes with a Canvas to preview your view.
+* Let's start with declaring the data that we want to show.  In the newly created view, add a `notes` property of type `[Note]` as a stored property of the `NoteRow` view.  This will be our full list of notes.
+* Since we want each row to only show a single note element from the array, add an `index` property of type `[Int]` which specifies which note to show in the row.
 * Since we added a new property we now have to update the previews property of the `NoteRow_Previews` struct as well
   * Add an array of `Note`s: `static let notes = [Note(title: "Note title...", content: "Note content...")]`
-  * Update the `NoteRow()` initializer in the previews struct to accept notes and index as a parameter like so: `NoteRow(notes: .constant(notes), index: 0)`
+  * Update the `NoteRow()` initializer in the previews struct to accept notes and index as a parameter like so: `NoteRow(notes: notes, index: 0)`
 
 Your `NoteRow.swift` file should now look like this:
 
@@ -87,12 +99,13 @@ Check out your work in the Canvas to make sure everything is working. You might 
 
 ### Building the Row Layout
 
-1. Start by adding a Text Field.
+1. Start by adding a TextField to display a notes title.  Text fields allow users to observe **and** edit text, similar to what you may see when logging into an app:
+    <insert text field illustration>
 2. When creating the TextField, the first parameter is the default text to show when the TextField is empty, and the second parameter is the String object to maintain the current TextField's content.  We'll use the `notes` property with the index to get a specific `Note`, then use the `title` like so: `TextField("Enter note title", text: notes[index].title)`
 3. You'll notice the following error:
 `Cannot convert value of type 'String' to expected argument type 'Binding<String>'`
 In SwiftUI, a **binding** creates a two-way shared connection between the `TextView` and a property marked with the  `@Binding` property wrapper. User interaction with the `TextField` changes the value of `title`, and programmatically changing `title` causes the `TextField` to update its state.
-4. Add the @Binding property wrapper to the notes property, then use the binding using the `$` prefix.
+4. Add the @Binding property wrapper to the notes property, then use the binding by adding a `$` prefix to the `notes` property (`$notes`).
 
 Your `NoteRow` should now look like this:
 
@@ -107,7 +120,16 @@ struct NoteRow: View {
 }
 ```
 
-### Customizing the Row Preview
+### Fixing and Customizing the Row Preview
+
+First, let's fix the error that is being displayed:
+> "Cannot convert value of type '[Note]' to expected argument type 'Binding<[Note]>'"
+
+As the error says, our `NoteRow` now expects a binding.  A simple way to convert a non-binding property to a binding property is to wrap it as a constant:
+
+```swift
+NoteRow(notes: .constant(notes), index: 0).previewLayout(.fixed(width: 300, height: 70))
+```
 
 You can customize the returned content from a preview provider to render exactly the previews that are most helpful to you in the Canvas. Let's play around with the `previewLayout()` modifier to create previews that actually look like rows.
 
@@ -124,6 +146,8 @@ struct NoteRow_Previews: PreviewProvider {
 
 Previewing your views is a powerful feature as it lets you see all the possibilites your view can live in. You can also use the `.environment` modifer to preview your views in Dark Mode! You can also preview your views in other platforms like the AppleTV or Apple Watch.
 
+It is important to note that anything done in the `PreviewProvider` will not impact how the view is displayed to the user.  It is used for visual testing purposes only.
+
 ### Looking Forward: Using `@Binding`
 
 In a future section, we will be creating a parent view that will show multiple `NoteRow`s.  That parent view will be responsible for maintaining an array of notes, and passing them into the notes property we created here in the `NoteRow`.  
@@ -132,11 +156,13 @@ This could leave an opportunity for the two arrays (one in the parent view, one 
 
 However, an additional benefit to using the `@Binding` property wrapper for the `notes` property is that it will be designated as shared between the parent view and our `NoteRow` child view.  Meaning, if the child view changes the value of a `Note`, the parent view's array will be updated as well. 🎉
 
-## Using NoteRow With Our List
+## Creating our Notes Summary
 
-In your **Project Navigator (⌘1)** click on `ContentView.swift`
+In your **Project Navigator (⌘1)** click on `ContentView.swift`.  This view will be serve as our note summary screen.
 
-At this point, we are ready to show multiple notes by using multiple `NoteRow`s.  Define an array of notes including two default notes using the following var as the first line in the `ContentView` struct:
+Our goal is to show multiple notes on the note summary screen by using multiple `NoteRow`s, the view we just created.
+
+Let's start by defining our model.  Define an array of notes including two default notes using the following var as the first line in the `ContentView` struct:
 
 ```swift
 @State var notes: [Note] = [
@@ -144,6 +170,7 @@ At this point, we are ready to show multiple notes by using multiple `NoteRow`s.
     Note(title: "SES is awesome", content: "It's true")
 ]
 ```
+<insert description of state>
 
 We're ready to use our newly created `NoteRow`.
 
@@ -178,6 +205,10 @@ var body: some View {
 ```
 Here, we are "hard coding" the number of rows we want to show.  Let's instead use the size of our notes array to determine how many `NoteRow`s to create.
 
+Let's try running the application in the iOS simulator.  Click the **Product** dropdown menu, then select **Run**.  Alternatively, click the play button in the very top left of Xcode.
+
+We should be able to observe **and** edit each note's title.
+
 ### Creating a Dynamic List
 
 When we use `List` to make dynamic views, SwiftUI needs to know how it can identify each item *uniquely*, otherwise it’s not able to compare view hierarchies to figure out what has changed.
@@ -185,11 +216,14 @@ When we use `List` to make dynamic views, SwiftUI needs to know how it can ide
 To accomplish this, modify the `Note` structure in `Note.swift` to make it conform to the **Identifiable** protocol, like this:
 
 ```swift
+import Foundation
+
 struct Note: Identifiable {
     let id = UUID()
-    var content: String
     var title: String
+    var content: String
 }
+
 ```
 
 > First, we added **Identifiable** to the list of protocol conformances. **Identifiable** means “this type can be identified uniquely.” The `Identifiable` protocol has only one requirement, which is that there must be a property called `id` that contains a unique identifier. We already added that to our `Note` struct, so we don’t need to do any extra work – our type conforms to **Identifiable**.
@@ -205,6 +239,9 @@ List(notes.indices, id: \.self) { index in
     NoteRow(notes: self.$notes, index: index)
 }
 ```
+<insert explanation of self>
+
+Let's add a third default note to verify that our List is now displaying dynamically based on the number of elements in our `notes` array.
 
 ### Adding a NavigationView
 
@@ -220,14 +257,15 @@ NavigationView {
     .navigationBarTitle("Notes")
 }
 ```
+The canvas should now show our "Notes" navigation title. 🎉
 
-### Viewing the full note
+## Creating our Note Detail
 
-To this point, we can only see and edit the title of each note.  We will need to create a new view to see and edit the content of a note.
+To this point, we can only observe and edit the title of each note.  We will need to create a new view to see and edit the content of a note.
 
-* Create a new SwiftUI file called `NoteView.swift`.
+* Create a new SwiftUI file called `NoteDetail.swift`.
 
-Just like in the NoteRow, we'll add the following two vars at the beginning of the `NoteView` struct:
+Just like in the NoteRow, we'll add the following two vars at the beginning of the `NoteDetail` struct:
 
 ```swift
 @Binding var notes: [Note]
@@ -242,7 +280,7 @@ var body: some View {
 }
 ```
 
-Let's also add the note's title in the navigation bar's title:
+Let's also add the note's title in the navigation bar's title.  Since we won't be editing the title in this view, we use the non-binding `notes` (without the `$` prefix):
 
 ```swift
 var body: some View {
@@ -251,13 +289,13 @@ var body: some View {
 }
 ```
 
-Lastly, let's setup the `NoteView_Previews` similarly to our NoteRow:
+Lastly, let's setup the `NoteDetail_Previews` similarly to our NoteRow:
 
 ```swift
-struct NoteView_Previews: PreviewProvider {
+struct NoteDetail_Previews: PreviewProvider {
     static let notes = [Note(title: "Note title...", content: "Note content...")]
     static var previews: some View {
-        NoteView(notes: .constant(notes), index: 0)
+        NoteDetail(notes: .constant(notes), index: 0)
     }
 }
 ```
@@ -266,16 +304,20 @@ struct NoteView_Previews: PreviewProvider {
 
 Now we have a beautiful new view, but no way of accessing it. Let's open up `ContentView.swift` and get to work.
 
+Let's wrap our `NoteRow` in a `NavigationLink`.  A `NavigationLink` is a button that triggers a navigation presentation when pressed.
+
 ```swift
-NavigationLink(destination: NoteView(notes: self.$notes, index: index)) {
+NavigationLink(destination: NoteDetail(notes: self.$notes, index: index)) {
     NoteRow(notes: self.$notes, index: index)
 }
 ```
-We wrap our `NoteRow` in a `NavigationLink`.  A `NavigationLink` is a button that triggers a navigation presentation when pressed.  We specified that the destination of the link when pressed is our new `NoteView`.
+We specified that the destination of the link when pressed is our new `NoteDetail`, passing along the `notes` binding and the `index`.
 
 ### Testing it out, Part 2
 
 <fill this in>
+add steps about running on simulator?
+youll notice it added the arrows to denote that each cell now navigates to a new screen
 
 ***
 
