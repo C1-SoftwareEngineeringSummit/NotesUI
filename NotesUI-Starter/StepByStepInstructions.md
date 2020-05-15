@@ -46,7 +46,7 @@ struct Note {
 
 > Every note needs a title which should be changeable, so a variable (var) of type `String` is the way to go.
 
-Now, with our notes model ready, we can start building our UI using SwiftUI. We will start by building the UI for an individual row that will be show on the master screen.  Then, we will use that UI element to show each note in a list.
+Now, with our notes model ready, we can start building our UI using SwiftUI. We will start by building the UI for an individual row that will be show on the summary screen.  Then, we will use that UI element to show each note in a list.
 
 ## Displaying a Note in a Row
 
@@ -62,7 +62,7 @@ A **List** is a container which displays your data in a column, with a row for e
   3. Name the file `NoteRow`
 * Take a moment to explore this new view. It includes a body View property that contains a single Text property.  Notice it comes with a Canvas to preview your view.
 * Let's start with declaring the data that we want to show.  In the newly created view, add a `notes` property of type `[Note]` as a stored property of the `NoteRow` view.  This will be our full list of notes.
-* Since we want each row to only show a single note element from the array, add an `index` property of type `[Int]` which specifies which note to show in the row.
+* Since we want each row to only show a single note element from the array, add an `index` property of type `Int` which specifies which note to show in the row.
 * Since we added a new property we now have to update the previews property of the `NoteRow_Previews` struct as well
   * Add an array of `Note`s: `static let notes = [Note(title: "Note title...", content: "Note content...")]`
   * Update the `NoteRow()` initializer in the previews struct to accept notes and index as a parameter like so: `NoteRow(notes: notes, index: 0)`
@@ -104,7 +104,7 @@ Check out your work in the Canvas to make sure everything is working. You might 
 2. When creating the TextField, the first parameter is the default text to show when the TextField is empty, and the second parameter is the String object to maintain the current TextField's content.  We'll use the `notes` property with the index to get a specific `Note`, then use the `title` like so: `TextField("Enter note title", text: notes[index].title)`
 3. You'll notice the following error:
 `Cannot convert value of type 'String' to expected argument type 'Binding<String>'`
-In SwiftUI, a **binding** creates a two-way shared connection between the `TextView` and a property marked with the  `@Binding` property wrapper. User interaction with the `TextField` changes the value of `title`, and programmatically changing `title` causes the `TextField` to update its state.
+In SwiftUI, a **binding** creates a two-way shared connection between the `TextView` and a property marked with the `@Binding` property wrapper. User interaction with the `TextField` changes the value of `title`, and programmatically changing `title` causes the `TextField` to update its state.
 4. Add the @Binding property wrapper to the notes property, then use the binding by adding a `$` prefix to the `notes` property (`$notes`).
 
 Your `NoteRow` should now look like this:
@@ -311,7 +311,7 @@ Here we add a Button view to the trailing section of our navigation bar.  When t
 
 ## App Design
 
-SwiftUI allows you to customize any UI element in several ways.  For example, text can be customized with different colors, fonts, backgrounds and apply rotation effects.
+SwiftUI allows you to customize any UI element in several ways.  For example, text can be customized with different colors, fonts, backgrounds or rotation effects.
 
 Learn more about customizing your application with the following resources:
 
