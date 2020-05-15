@@ -10,9 +10,7 @@ The summary screen will allow the user to add a new note, change the title of a 
 
 The detail screen will allow the user to view and edit the selected note's content.
 
-![Summary Screen](../MarkdownAssets/finished_summary.png)
-
-![Detail Screen](../MarkdownAssets/finished_detail.png)
+![Finished Application](../MarkdownAssets/finished_app.png)
 
 ## Initial Project Setup
 
