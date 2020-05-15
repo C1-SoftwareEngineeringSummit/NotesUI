@@ -100,7 +100,7 @@ Check out your work in the Canvas to make sure everything is working. You might 
 ### Building the Row Layout
 
 1. Start by adding a TextField to display a notes title.  Text fields allow users to observe **and** edit text, similar to what you may see when logging into an app:
-    <insert text field illustration>
+    ![TextField Example](../MarkdownAssets/textfield_example.png)
 2. When creating the TextField, the first parameter is the default text to show when the TextField is empty, and the second parameter is the String object to maintain the current TextField's content.  We'll use the `notes` property with the index to get a specific `Note`, then use the `title` like so: `TextField("Enter note title", text: notes[index].title)`
 3. You'll notice the following error:
 `Cannot convert value of type 'String' to expected argument type 'Binding<String>'`
@@ -150,7 +150,7 @@ It is important to note that anything done in the `PreviewProvider` will not imp
 
 ### Looking Forward: Using `@Binding`
 
-In a future section, we will be creating a parent view that will show multiple `NoteRow`s.  That parent view will be responsible for maintaining an array of notes, and passing them into the notes property we created here in the `NoteRow`.  
+In a future section, we will be creating a parent view that will show multiple `NoteRow`s.  That parent view will be responsible for maintaining the array of notes, and passing them into the notes property we created here in the `NoteRow`.
 
 This could leave an opportunity for the two arrays (one in the parent view, one in the `NoteRow` child view) to be out-of-sync, since the `NoteRow` will be editing individual `Note` structures, which are pass-by-value.  
 
@@ -170,7 +170,11 @@ Let's start by defining our model.  Define an array of notes including two defau
     Note(title: "SES is awesome", content: "It's true")
 ]
 ```
-<insert description of state>
+The `@State` property wrapper is similar to the `@Binding` property wrapper, allowing a two-way binding between the property and the view.  The difference is that a `@Binding` can not be itialized and must have it's reference passed in from a `@State` property in another view.  The `@State` property is considered the "source-of-truth".  In our application, the notes array created in the `ContentView` will be the "source-of-truth" for any view needing access to notes.  In the `NoteRow`,  by declaring our notes array as `@Binding`, we are saying that the value will be passed in from another view.  
+
+Consider this analogy of @State as a home owner and @Binding as a tenant:
+
+![@State/@Binding Tenant Analogy](../MarkdownAssets/tenant_analogy.png)
 
 We're ready to use our newly created `NoteRow`.
 
@@ -194,12 +198,12 @@ As expected, only a single NoteRow is shown.  Now we want to show a NoteRow for 
 
     ![Embed In List](../MarkdownAssets/EmbedInList.png)
 
-4. Make the List span from `0 ..< 2` and update `NoteRow` to use the provided `item` closure parameter. `ContentView` should now look like this:
+3. Make the List span from `0 ..< 2` and update `NoteRow` to use the provided closure parameter, which we can rename from `item` to `index`. `ContentView` should now look like this:
 
 ```swift
 var body: some View {
-    List(0 ..< 2) { item in
-        NoteRow(notes: self.$notes, index: item)
+    List(0 ..< 2) { index in
+        NoteRow(notes: self.$notes, index: index)
     }
 }
 ```
@@ -211,37 +215,13 @@ We should be able to observe **and** edit each note's title.
 
 ### Creating a Dynamic List
 
-When we use `List` to make dynamic views, SwiftUI needs to know how it can identify each item *uniquely*, otherwise it’s not able to compare view hierarchies to figure out what has changed.
-
-To accomplish this, modify the `Note` structure in `Note.swift` to make it conform to the **Identifiable** protocol, like this:
+The previous `List` approach works, but only if there are two notes.  Let's make the `List` more dynamic by creating `NoteRow`s based on the number of elements in the notes array.
 
 ```swift
-import Foundation
-
-struct Note: Identifiable {
-    let id = UUID()
-    var title: String
-    var content: String
-}
-
-```
-
-> First, we added **Identifiable** to the list of protocol conformances. **Identifiable** means “this type can be identified uniquely.” The `Identifiable` protocol has only one requirement, which is that there must be a property called `id` that contains a unique identifier. We already added that to our `Note` struct, so we don’t need to do any extra work – our type conforms to **Identifiable**.
->
-> Our `id` is a **UUID**, which is short for Universally Unique Identifier. You can read more about that [here](https://developer.apple.com/documentation/foundation/uuid).
->
-> Notes are now guaranteed to be uniquely identifiable, and we won't need to tell our `List` loop which property to use for the identifier – it knows there will be a unique `id`. You can read more about this [here](https://www.hackingwithswift.com/quick-start/swiftui/how-to-create-views-in-a-loop-using-foreach).
-
-As a result of this change we can use the following code to display our list of notes. Modify the `List` code in `ContentView.swift` to match the following:
-
-```swift
-List(notes.indices, id: \.self) { index in
+List(0 ..< notes.count) { index in
     NoteRow(notes: self.$notes, index: index)
 }
 ```
-<insert explanation of self>
-
-Let's add a third default note to verify that our List is now displaying dynamically based on the number of elements in our `notes` array.
 
 ### Adding a NavigationView
 
@@ -312,13 +292,6 @@ NavigationLink(destination: NoteDetail(notes: self.$notes, index: index)) {
 }
 ```
 We specified that the destination of the link when pressed is our new `NoteDetail`, passing along the `notes` binding and the `index`.
-
-### Testing it out, Part 2
-
-<fill this in>
-<youll notice it added the arrows to denote that each cell now navigates to a new screen>
-
-***
 
 ### Adding new notes
 
