@@ -14,9 +14,9 @@
 		B41BFF3F23B11096003CF4A7 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B41BFF3E23B11096003CF4A7 /* Preview Assets.xcassets */; };
 		B41BFF4223B11096003CF4A7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B41BFF4023B11096003CF4A7 /* LaunchScreen.storyboard */; };
 		B41BFF6623B11140003CF4A7 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = B41BFF6523B11140003CF4A7 /* Note.swift */; };
-		B4B492E723BBBB5400A47DEA /* NoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B492E623BBBB5400A47DEA /* NoteView.swift */; };
 		C560FE7B23BEDB5500708D56 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C560FE7A23BEDB5500708D56 /* TextView.swift */; };
 		C56A04D223C24B9D003136C0 /* NoteRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56A04D123C24B9D003136C0 /* NoteRow.swift */; };
+		D984BDE3246E49B4003D8A0D /* NoteDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = D984BDE2246E49B4003D8A0D /* NoteDetail.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,10 +48,10 @@
 		B41BFF4823B11096003CF4A7 /* NotesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NotesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B41BFF5323B11096003CF4A7 /* NotesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NotesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B41BFF6523B11140003CF4A7 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
-		B4B492E623BBBB5400A47DEA /* NoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteView.swift; sourceTree = "<group>"; };
 		C560FE7A23BEDB5500708D56 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
 		C56A04D123C24B9D003136C0 /* NoteRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteRow.swift; sourceTree = "<group>"; };
 		C5C633F323C2BF4B0021FBCF /* StepByStepInstructions.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = StepByStepInstructions.md; path = "../NotesUI-Starter/StepByStepInstructions.md"; sourceTree = "<group>"; };
+		D984BDE2246E49B4003D8A0D /* NoteDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteDetail.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,18 +79,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		14F841F024687A9500413B86 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				B41BFF3B23B11096003CF4A7 /* Assets.xcassets */,
-				B41BFF4023B11096003CF4A7 /* LaunchScreen.storyboard */,
-				B41BFF3523B11095003CF4A7 /* AppDelegate.swift */,
-				B41BFF3723B11095003CF4A7 /* SceneDelegate.swift */,
-				C560FE7A23BEDB5500708D56 /* TextView.swift */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
 		B41BFF2923B11095003CF4A7 = {
 			isa = PBXGroup;
 			children = (
@@ -113,10 +101,16 @@
 		B41BFF3423B11095003CF4A7 /* Notes */ = {
 			isa = PBXGroup;
 			children = (
+				B41BFF3923B11095003CF4A7 /* ContentView.swift */,
+				B41BFF6523B11140003CF4A7 /* Note.swift */,
+				C56A04D123C24B9D003136C0 /* NoteRow.swift */,
+				D984BDE2246E49B4003D8A0D /* NoteDetail.swift */,
+				C560FE7A23BEDB5500708D56 /* TextView.swift */,
+				B41BFF3523B11095003CF4A7 /* AppDelegate.swift */,
+				B41BFF3723B11095003CF4A7 /* SceneDelegate.swift */,
+				B41BFF3B23B11096003CF4A7 /* Assets.xcassets */,
+				B41BFF4023B11096003CF4A7 /* LaunchScreen.storyboard */,
 				B41BFF4323B11096003CF4A7 /* Info.plist */,
-				B41BFF6723B1115D003CF4A7 /* Models */,
-				B4B492E323BBBADE00A47DEA /* Views */,
-				14F841F024687A9500413B86 /* Resources */,
 				B41BFF3D23B11096003CF4A7 /* Preview Content */,
 			);
 			path = Notes;
@@ -128,24 +122,6 @@
 				B41BFF3E23B11096003CF4A7 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
-			sourceTree = "<group>";
-		};
-		B41BFF6723B1115D003CF4A7 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				B41BFF6523B11140003CF4A7 /* Note.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		B4B492E323BBBADE00A47DEA /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				B41BFF3923B11095003CF4A7 /* ContentView.swift */,
-				C56A04D123C24B9D003136C0 /* NoteRow.swift */,
-				B4B492E623BBBB5400A47DEA /* NoteView.swift */,
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -281,10 +257,10 @@
 			files = (
 				C56A04D223C24B9D003136C0 /* NoteRow.swift in Sources */,
 				B41BFF3623B11095003CF4A7 /* AppDelegate.swift in Sources */,
+				D984BDE3246E49B4003D8A0D /* NoteDetail.swift in Sources */,
 				C560FE7B23BEDB5500708D56 /* TextView.swift in Sources */,
 				B41BFF3823B11095003CF4A7 /* SceneDelegate.swift in Sources */,
 				B41BFF3A23B11095003CF4A7 /* ContentView.swift in Sources */,
-				B4B492E723BBBB5400A47DEA /* NoteView.swift in Sources */,
 				B41BFF6623B11140003CF4A7 /* Note.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

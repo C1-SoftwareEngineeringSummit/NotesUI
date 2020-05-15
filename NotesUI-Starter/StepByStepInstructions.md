@@ -345,3 +345,4 @@ Learn more about customizing your application with the following resources:
 
 * [Text](https://www.appcoda.com/learnswiftui/swiftui-text.html)
 * [Navigation Bar](https://www.ioscreator.com/tutorials/swiftui-customize-navigation-bar-tutorial)
+* [Custom Launch Screen](https://www.tutlane.com/tutorial/ios/ios-launch-screen-splash-screen)
