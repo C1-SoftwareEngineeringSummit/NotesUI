@@ -16,7 +16,7 @@ struct ContentView: View {
 
     var body: some View {
         NavigationView {
-            List(0 ..< notes.count) { index in
+            List(notes.indices, id: \.self) { index in
                 NavigationLink(destination: NoteDetail(notes: self.$notes, index: index)) {
                     NoteRow(notes: self.$notes, index: index)
                 }

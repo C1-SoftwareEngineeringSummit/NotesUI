@@ -215,13 +215,17 @@ We should be able to observe **and** edit each note's title.
 
 ### Creating a Dynamic List
 
-The previous `List` approach works, but only if there are two notes.  Let's make the `List` more dynamic by creating `NoteRow`s based on the number of elements in the notes array.
+The previous `List` approach works.  We loop from the integer `0` to the integer `1`, which creates a `NoteRow` for the note at index `0` and index `1` in the `notes` array.  But what if we have more or less than two notes in the array?  Let's make the `List` more dynamic by creating `NoteRow`s based on the number of elements in the notes array.
 
 ```swift
-List(0 ..< notes.count) { index in
+List(notes.indices, id: \.self) { index in
     NoteRow(notes: self.$notes, index: index)
 }
 ```
+
+The first parameter is the array we want to iterate through, creating a `NoteRow` for each element.  You'll notice we use the `indices` property instead of the `notes` array itself.  Because our `NoteRow` expects an index parameter, we want to loop through the indices of the array (ex: `[0, 1, 2, ...]`  instead of the actual element itself (ex: `[Note(), Note(), Note(), ...]`).
+
+The second parameter is an `id`.  `List` expects each element to have a unique identifier.  The argument `\.self` tells List that each element is identified by itself, which is a unique `Int`, because each element in an array exists at a different index.
 
 ### Adding a NavigationView
 
@@ -293,7 +297,7 @@ NavigationLink(destination: NoteDetail(notes: self.$notes, index: index)) {
 ```
 We specified that the destination of the link when pressed is our new `NoteDetail`, passing along the `notes` binding and the `index`.
 
-### Adding new notes
+## Adding new notes
 
 We can now see and edit each notes title and content.  But how can we add new notes?  We will do so by adding a "New"" button to the top right (called the "trailing") section of our navigation bar.  When tapped, we will add a new note to our notes array.
 
