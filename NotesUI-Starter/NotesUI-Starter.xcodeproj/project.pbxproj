@@ -14,7 +14,6 @@
 		C5C633E423C2BC830021FBCF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C5C633E323C2BC830021FBCF /* Preview Assets.xcassets */; };
 		C5C633E723C2BC830021FBCF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C5C633E523C2BC830021FBCF /* LaunchScreen.storyboard */; };
 		C5C633F023C2BCE30021FBCF /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C633EF23C2BCE30021FBCF /* TextView.swift */; };
-		C5C633F223C2BCED0021FBCF /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C633F123C2BCED0021FBCF /* Utilities.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,7 +27,6 @@
 		C5C633E823C2BC830021FBCF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C5C633EE23C2BCBD0021FBCF /* StepByStepInstructions.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = StepByStepInstructions.md; sourceTree = "<group>"; };
 		C5C633EF23C2BCE30021FBCF /* TextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
-		C5C633F123C2BCED0021FBCF /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,7 +64,6 @@
 				C5C633DC23C2BC810021FBCF /* SceneDelegate.swift */,
 				C5C633DE23C2BC810021FBCF /* ContentView.swift */,
 				C5C633EF23C2BCE30021FBCF /* TextView.swift */,
-				C5C633F123C2BCED0021FBCF /* Utilities.swift */,
 				C5C633E023C2BC830021FBCF /* Assets.xcassets */,
 				C5C633E523C2BC830021FBCF /* LaunchScreen.storyboard */,
 				C5C633E823C2BC830021FBCF /* Info.plist */,
@@ -157,7 +154,6 @@
 				C5C633DB23C2BC810021FBCF /* AppDelegate.swift in Sources */,
 				C5C633F023C2BCE30021FBCF /* TextView.swift in Sources */,
 				C5C633DD23C2BC810021FBCF /* SceneDelegate.swift in Sources */,
-				C5C633F223C2BCED0021FBCF /* Utilities.swift in Sources */,
 				C5C633DF23C2BC810021FBCF /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
