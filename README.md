@@ -4,7 +4,7 @@ Since you will be learning a pletheora of information during Capital One's softw
 
 ## Requirements
 
-This project has been updated to work with iOS 13, Xcode 11, and Swift 5.1.
+This project has been updated to work with iOS 13, Xcode 11.4.1, and Swift 5.2.
 
 ## Content
 
