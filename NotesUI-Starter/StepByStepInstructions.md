@@ -64,7 +64,7 @@ A **List** is a container which displays your data in a column, with a row for e
 * Let's start with declaring the data that we want to show.  In the newly created view, add a `notes` property of type `[Note]` as a stored property of the `NoteRow` view.  This will be our full list of notes.
 * Since we want each row to only show a single note element from the array, add an `index` property of type `Int` which specifies which note to show in the row.
 * Since we added a new property we now have to update the previews property of the `NoteRow_Previews` struct as well
-  * Add an array of `Note`s: `static let notes = [Note(title: "Note title...", content: "Note content...")]`
+  * Add an array of `Note`s: `static let notes = [Note(title: "", content: "")]`
   * Update the `NoteRow()` initializer in the previews struct to accept notes and index as a parameter like so: `NoteRow(notes: notes, index: 0)`
 
 Your `NoteRow.swift` file should now look like this:
@@ -82,7 +82,7 @@ struct NoteRow: View {
 }
 
 struct NoteRow_Previews: PreviewProvider {
-    static let notes = [Note(title: "Note title...", content: "Note content...")]
+    static let notes = [Note(title: "", content: "")]
     static var previews: some View {
         NoteRow(notes: notes, index: 0)
     }
