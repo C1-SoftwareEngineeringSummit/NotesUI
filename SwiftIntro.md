@@ -48,7 +48,7 @@ Next we’ll use conditionals.
 ```swift
 let temperature = 40
 if temperature <= 32 {
-    print("It's freezing")
+    print("It's freezing!")
 } else {
     print ("It's not that cold")
 }
@@ -92,7 +92,7 @@ print(genericGreeting())
 let customGreeting: (String) -> (String) = { person in 
     return "Hello, \(person)"
 }
-print(customGreeting("Newton")
+print(customGreeting("Newton"))
 
 // more complicated
 let strings = ["x", "z", "d", "f", "a"]
@@ -173,27 +173,35 @@ print(firstNote.content)
 Now change the class to struct. What happens? Pass by value! Passing by value is way safer than having multiple references to the same instance.
 
 ### Protocols
-Same idea as interfaces in java. They define a blueprint of methods, properties, and other requirements and can be adopted by classes, structs, and enums.
+Same idea as interfaces in java. They define a blueprint of methods, properties, and other requirements and can be adopted by classes, structs, and enums. Properties declared in protocols must always be variable (var), and can either be gettable { get }, or gettable AND settable { get set }. Getters and setters can be defined to retrieve and set other properties and values indirectly.
 
 ```swift
 protocol Shape {
     var sides: Int { get }
-    var area: Double { get }
+    var area: Double { get set }
 }
 
 struct Circle: Shape {
     var sides: Int
-    var area: Double
-    var radius: Int
+    var area: Double {
+        get {
+            Double.pi * pow(Double(radius), 2)
+        }
+        set {
+            radius = pow((newValue / Double.pi), 0.5)
+        }
+    }
+    var radius: Double
 
-    init(radius: Int) {
+    init(radius: Double) {
         self.radius = radius
-        self.area = Double.pi * pow(Double(radius), 2)
         sides = 0
     }
 
 }
 
-let circle = Circle(radius: 5)
+var circle = Circle(radius: 5)
 print(circle.area)
+circle.area = 50
+print(circle.radius)
 ```
