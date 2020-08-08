@@ -23,8 +23,6 @@ emoji = "🤪" // Cannot assign to value: 'emoji' is a 'let' constant
 
 Yay! no semicolons
 
-`//: ## Switch with partner`
-
 ## Control Flow
 Let’s talk about control flow: Starting with loops
 You use the `for-in` loop to iterate over a sequence, such as items in an array, ranges of numbers, or characters in a string.
@@ -35,9 +33,9 @@ for character in "The Great British Baking Show 🍰" {
 ```
 
 You can also use `for-in` loops with numeric ranges. 
-In this example we use the closed range operator (…) to iterate from 1 to 5 inclusive. 
+In this example we use the closed range operator (...) to iterate from 1 to 5 inclusive.
 ```swift
-for index in 1...5 { // Equivalent to for(index = 0; index < 5; index++)
+for index in 1...5 { // Equivalent to for(index = 1; index <= 5; index++)
     print("\(index) times 5 is \(index * 5)")
 }
 ```
@@ -55,8 +53,6 @@ if temperature <= 32 {
 ```
 
 Yay! no parenthesis. Swift syntax is pretty light.
-
-`//: ## Switch with partner`
 
 ## Functions
 Use the `func` keyword and indicate the function’s return type with the **return arrow**->
@@ -102,8 +98,6 @@ strings.sorted(by: { name1, name2 in
     return name1 < name2
 })
 ```
-
-`//: ## Switch with partner`
 
 ## Optionals
 You use *optionals* in situations where a value may be absent. An optional represents two possibilities: Either there *is* a value, and you can unwrap the optional to access that value, or there *isn’t* a value at all.
@@ -151,8 +145,6 @@ func getPaid(amount: Int?) -> String {
 
 print(getPaid(amount: nil))
 ```
-
-`//: ## Switch with partner`
 
 ## Classes vs Structs
 ```swift
@@ -205,3 +197,5 @@ print(circle.area)
 circle.area = 50
 print(circle.radius)
 ```
+
+< add a section about enum/static property dot syntax here >

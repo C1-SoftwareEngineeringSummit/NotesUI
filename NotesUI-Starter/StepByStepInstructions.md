@@ -99,13 +99,15 @@ Check out your work in the Canvas to make sure everything is working. You might 
 
 ### Building the Row Layout
 
-1. Start by adding a TextField to display a notes title.  Text fields allow users to observe **and** edit text, similar to what you may see when logging into an app:
-    ![TextField Example](../MarkdownAssets/textfield_example.png)
+1. Start by adding a TextField to display a notes title.  This TextField will go in the `body` of our `NoteRow`.  Text fields allow users to observe **and** edit text, similar to what you may see when logging into an app:
+
+![TextField Example](../MarkdownAssets/textfield_example.png)
+
 2. When creating the TextField, the first parameter is the default text to show when the TextField is empty, and the second parameter is the String object to maintain the current TextField's content.  We'll use the `notes` property with the index to get a specific `Note`, then use the `title` like so: `TextField("Enter note title", text: notes[index].title)`
 3. You'll notice the following error:
 `Cannot convert value of type 'String' to expected argument type 'Binding<String>'`
 In SwiftUI, a **binding** creates a two-way shared connection between the `TextView` and a property marked with the `@Binding` property wrapper. User interaction with the `TextField` changes the value of `title`, and programmatically changing `title` causes the `TextField` to update its state.
-4. Add the @Binding property wrapper to the notes property, then use the binding by adding a `$` prefix to the `notes` property (`$notes`).
+4. Add the @Binding property wrapper to the `notes` property, then use the binding by adding a `$` prefix to the `notes` property (`$notes`).
 
 Your `NoteRow` should now look like this:
 
@@ -128,8 +130,10 @@ First, let's fix the error that is being displayed:
 As the error says, our `NoteRow` now expects a binding.  A simple way to convert a non-binding property to a binding property is to wrap it as a constant:
 
 ```swift
-NoteRow(notes: .constant(notes), index: 0).previewLayout(.fixed(width: 300, height: 70))
+NoteRow(notes: .constant(notes), index: 0)
 ```
+
+> Using `.constant(notes)` in this case is the same as typing `Binding.constant(notes)`. `Binding` can be omitted because Swift can infer it from the context. Swift knows that `NoteRow` needs a `Binding` to an array of `Note`s, and it knows that `Binding.constant()` will create a binding property from our hard-coded `notes` array.
 
 You can customize the returned content from a preview provider to render exactly the previews that are most helpful to you in the Canvas. Let's play around with the `previewLayout()` modifier to create previews that actually look like rows.
 
@@ -170,9 +174,9 @@ Let's start by defining our model.  Define an array of notes including two defau
     Note(title: "SES is awesome", content: "It's true")
 ]
 ```
-The `@State` property wrapper is similar to the `@Binding` property wrapper, allowing a two-way binding between the property and the view.  The difference is that a `@Binding` can not be itialized and must have it's reference passed in from a `@State` property in another view.  The `@State` property is considered the "source-of-truth".  In our application, the notes array created in the `ContentView` will be the "source-of-truth" for any view needing access to notes.  In the `NoteRow`,  by declaring our notes array as `@Binding`, we are saying that the value will be passed in from another view.  
+The `@State` property wrapper is similar to the `@Binding` property wrapper, allowing a two-way binding between the property and the view.  The difference is that a `@Binding` can not be initialized and must have its reference passed in from a `@State` property in another view.  The `@State` property is considered the "source-of-truth".  In our application, the notes array created in the `ContentView` will be the "source-of-truth" for any view needing access to notes.  In the `NoteRow`,  by declaring our notes array as `@Binding`, we are saying that the value will be passed in from another view.
 
-Consider this analogy of @State as a home owner and @Binding as a tenant:
+Consider this analogy of `@State` as a home owner and `@Binding` as a tenant:
 
 ![@State/@Binding Tenant Analogy](../MarkdownAssets/tenant_analogy.png)
 
@@ -198,7 +202,7 @@ As expected, only a single NoteRow is shown.  Now we want to show a NoteRow for 
 
     ![Embed In List](../MarkdownAssets/EmbedInList.png)
 
-3. Make the List span from `0 ..< 2` and update `NoteRow` to use the provided closure parameter, which we can rename from `item` to `index`. `ContentView` should now look like this:
+3. Make the List span from `0 ..< 2` and update `NoteRow` to use the provided closure parameter, which we can rename from `item` to `index`. Additionally, we will now have to use `self.$notes` in our `NoteRow` initializer, rather than just `$notes`. `ContentView` should now look like this:
 
 ```swift
 var body: some View {
@@ -207,7 +211,7 @@ var body: some View {
     }
 }
 ```
-Here, we are "hard coding" the number of rows we want to show.  Let's instead use the size of our notes array to determine how many `NoteRow`s to create.
+Here, we are hard-coding the number of rows we want to show. Later, we will use the size of our notes array to determine how many `NoteRow`s to create.
 
 Let's try running the application in the iOS simulator.  Click the **Product** dropdown menu, then select **Run**.  Alternatively, click the play button in the very top left of Xcode.
 
@@ -299,7 +303,7 @@ We specified that the destination of the link when pressed is our new `NoteDetai
 
 ## Adding new notes
 
-We can now see and edit each notes title and content.  But how can we add new notes?  We will do so by adding a "New"" button to the top right (called the "trailing") section of our navigation bar.  When tapped, we will add a new note to our notes array.
+We can now see and edit each note's title and content.  But how can we add new notes?  We will do so by adding a "New" button to the top right (called the "trailing") section of our navigation bar.  When tapped, we will add a new note to our notes array.  Add the following code to the `body` of the `ContentView`.
 
 ```swift
 // ...
@@ -313,12 +317,6 @@ We can now see and edit each notes title and content.  But how can we add new no
 
 Here we add a Button view to the trailing section of our navigation bar.  When tapped, we insert a new note with an empty title and content to the top of the array.
 
-## App Design
+At this point, run the app once more. We should be able to edit each note's title, navigate to each note's detail screen and edit the contents, and also add new notes!
 
-SwiftUI allows you to customize any UI element in several ways.  For example, text can be customized with different colors, fonts, backgrounds or rotation effects.
-
-Learn more about customizing your application with the following resources:
-
-* [Text](https://www.appcoda.com/learnswiftui/swiftui-text.html)
-* [Navigation Bar](https://www.ioscreator.com/tutorials/swiftui-customize-navigation-bar-tutorial)
-* [Custom Launch Screen](https://www.tutlane.com/tutorial/ios/ios-launch-screen-splash-screen)
+Congratulations! Check out the [README](../README.md) for bonus functionality that you can add after completing this workshop.
