@@ -12,7 +12,7 @@ The detail screen will allow the user to view and edit the selected note's conte
 
 ![Finished Application](../MarkdownAssets/finished_app.png)
 
-## Initial Project Setup
+## 1. Initial Project Setup
 
 1. Open Terminal, and navigate to the directory in which you want to save this project
 2. Run the following command in Terminal: `git clone https://github.com/C1-SoftwareEngineeringSummit/NotesUI.git`
@@ -26,7 +26,7 @@ The detail screen will allow the user to view and edit the selected note's conte
 
 ![Bundle Identifier](../MarkdownAssets/BundleIdentifier.png)
 
-## Setting Up Our Model
+## 2. Setting Up Our Model
 
 A `Note` is going to be what we call our data model or more simply, a model. A model is a way to structure data, so that you can work inside your app's code and have a type that represents a real-world concept, like a note. In other words, we will be creating a data structure called `Note`.
 
@@ -51,7 +51,7 @@ struct Note {
 
 Now, with our notes model ready, we can start building our UI using SwiftUI. We will start by building the UI for an individual row that will be shown on the summary screen.  Then, we will use that UI element to show each note in a list.
 
-## Displaying a Note in a Row
+## 3. Displaying a Note in a Row
 
 A **List** is a container which displays your data in a column, with a row for each entry. This is the structure we will use to organize all our notes. Before we dive further into Lists, we need to create a view that will represent each row of our list.
 
@@ -174,7 +174,7 @@ This could leave an opportunity for the two arrays (one in the parent view, one 
 
 However, an additional benefit to using the `@Binding` property wrapper for the `notes` property is that it will be designated as shared between the parent view and our `NoteRow` child view.  Meaning, if the child view changes the value of a `Note`, the parent view's array will be updated as well. 🎉
 
-## Creating our Notes Summary
+## 4. Creating our Notes Summary
 
 In your **Project Navigator (⌘1)** click on `ContentView.swift`.  This view will serve as our note summary screen.
 
@@ -268,7 +268,7 @@ NavigationView {
 
 The canvas should now show our "Notes" navigation title. 🎉
 
-## Creating our Note Detail
+## 5. Creating our Note Detail
 
 Up to this point, we can only observe and edit the title of each note.  We will need to create a new view to see and edit the content of a note.
 
@@ -327,7 +327,7 @@ Build the app or refresh the canvas. You should be able to see that each row has
 
 ![Navigation Links](../MarkdownAssets/NavigationLinks.png)
 
-## Adding New Notes
+## 6. Adding New Notes
 
 We are now able to view and edit each note's title and content, but how do we go about adding new notes?  We will do so by adding a "New" button to the top right (called the "trailing") section of our navigation bar.  When tapped, we will add a new note to our notes array.  In ContentView add the following code to the `body` of the `ContentView`.
 
@@ -344,6 +344,8 @@ We are now able to view and edit each note's title and content, but how do we go
 Here we add a Button view to the trailing section of our navigation bar.  When tapped, we insert a new note with an empty title and content to the top of the array.
 
 At this point, run the app once more. We should be able to edit each note's title, navigate to each note's detail screen and edit the contents, and also add new notes!
+
+## Conclusion
 
 Congratulations! You now have a functioning iOS app written in SwiftUI.
 
