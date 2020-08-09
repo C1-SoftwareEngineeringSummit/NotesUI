@@ -324,9 +324,11 @@ We specified that the destination of the link when pressed is our new `NoteDetai
 
 Build the app or refresh the canvas. You should be able to see that each row has been updated with a link indicator, and can now be pressed.
 
-## Adding new notes
+![Navigation Links](../MarkdownAssets/NavigationLinks.png)
 
-We can now see and edit each note's title and content.  But how can we add new notes?  We will do so by adding a "New" button to the top right (called the "trailing") section of our navigation bar.  When tapped, we will add a new note to our notes array.  Add the following code to the `body` of the `ContentView`.
+## Adding New Notes
+
+We are now able to view and edit each note's title and content, but how do we go about adding new notes?  We will do so by adding a "New" button to the top right (called the "trailing") section of our navigation bar.  When tapped, we will add a new note to our notes array.  In ContentView add the following code to the `body` of the `ContentView`.
 
 ```swift
 // ...
@@ -342,4 +344,6 @@ Here we add a Button view to the trailing section of our navigation bar.  When t
 
 At this point, run the app once more. We should be able to edit each note's title, navigate to each note's detail screen and edit the contents, and also add new notes!
 
-Congratulations! Check out the [README](../README.md) for bonus functionality that you can add after completing this workshop.
+Congratulations! You now have a functioning iOS app written in SwiftUI.
+
+Check out the [README](../README.md) for bonus functionality that you can add after completing this workshop.
