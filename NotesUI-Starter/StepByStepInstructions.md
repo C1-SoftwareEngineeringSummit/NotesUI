@@ -23,7 +23,8 @@ The detail screen will allow the user to view and edit the selected note's conte
     * **NOTE:** You can also double-click the `NotesUI-Starter.xcodeproj` file in Finder
 6. Once the project is open in Xcode, click on the top level folder (NotesUI-Starter) then click on "General" settings and then find the "Identity" settings section.
 7. Inside Identity settings, modify the "Bundle Identifier" by adding your name to the end of it. For example, change it from `com.ses.NotesUI-Starter-MyName` to `com.ses.NotesUI-Starter-SteveJobs`
-    * ![Bundle Identifier](../MarkdownAssets/BundleIdentifier.png)
+
+![Bundle Identifier](../MarkdownAssets/BundleIdentifier.png)
 
 ## Setting Up Our Model
 
