@@ -95,7 +95,7 @@ struct NoteRow_Previews: PreviewProvider {
 }
 ```
 
-Check out your work in the Canvas to make sure everything is working. You might have to refresh the canvas by pressing the "Resume" button located on the top of the canvas.
+Check out your work in the Canvas to make sure everything is working. You might have to refresh the canvas by pressing the "Resume" button located on the top of the canvas. We haven't changed anything in the `body` yet, so all we should see is a blank screen with the greeting "Hello, World!".
 
 > If the Canvas is not open you can use the Option + Command + Return (`⌥ + ⌘ + ↩︎`) shortcut to display it.
 >
@@ -126,7 +126,7 @@ struct NoteRow: View {
     let index: Int
 
     var body: some View {
-        TextField("take a note", text: $notes[index].title)
+        TextField("Enter note title", text: $notes[index].title)
     }
 }
 ```
@@ -144,7 +144,7 @@ NoteRow(notes: .constant(notes), index: 0)
 
 > Using `.constant(notes)` in this case is the same as typing `Binding.constant(notes)`. `Binding` can be omitted because Swift can infer it from the context. Swift knows that `NoteRow` needs a `Binding` to an array of `Note`s, and it knows that `Binding.constant()` will create a binding property from our hard-coded `notes` array.
 
-Feel free to refresh your canvas to see the new `TextField`.
+Feel free to refresh your canvas to see the new `TextField`. Remember you can use the shortcut Option + Command + P (⌥ + ⌘ + P)!
 
 ### Customizing The Canvas
 
@@ -215,7 +215,7 @@ struct ContentView: View {
 }
 ```
 
-As expected, only a single NoteRow is shown.  Now we want to show a NoteRow for each Note in the array.
+As expected, only a single NoteRow is shown if we refresh the Canvas with Option + Command + P (⌥ + ⌘ + P).  Now we want to show a NoteRow for each Note in the array.
 
 3. Command-click on `NoteRow()`, and choose `Embed in List`
 
@@ -276,7 +276,7 @@ import SwiftUI
 struct ContentView: View {
     @State var notes: [Note] = [
         Note(title: "iOS is awesome", content: "It's true"),
-        Note(title: "SES is awesome", content: "It's also true")
+        Note(title: "SES is awesome", content: "It's true")
     ]
 
     var body: some View {
@@ -317,7 +317,7 @@ let index: Int
 ```
 
 
-Now, replace the default `Text` in the `body` variable with a `TextView`. A `TextView` is similar to a `TextField`, but it supports multiple lines of text. Use `$` to bind the current note's `content` to the `TextView` in the `body`:
+Now, replace the default `Text` in the `body` variable with a `TextView`. A `TextView` is similar to a `TextField`, but it supports multiple lines of text. Use `$` to bind the current note's `content` to the `TextView` in the `body`. This way, whenever a user changes the text in the `TextView`, the corresponding `Note` in our `notes` array will be updated, too:
 
 ```swift
 var body: some View {
@@ -396,7 +396,7 @@ import SwiftUI
 struct ContentView: View {
     @State var notes: [Note] = [
         Note(title: "iOS is awesome", content: "It's true"),
-        Note(title: "SES is awesome", content: "It's also true")
+        Note(title: "SES is awesome", content: "It's true")
     ]
 
     var body: some View {
@@ -420,7 +420,7 @@ struct ContentView_Previews: PreviewProvider {
 
 Build the app or refresh the canvas. You should be able to see that each row has been updated with a link indicator, and can now be pressed.
 
-![Navigation Links](../MarkdownAssets/NavigationLinks.png =500x)
+![Navigation Links](../MarkdownAssets/NavigationLinks.png)
 
 ## 6. Adding New Notes
 
@@ -448,7 +448,7 @@ import SwiftUI
 struct ContentView: View {
     @State var notes: [Note] = [
         Note(title: "iOS is awesome", content: "It's true"),
-        Note(title: "SES is awesome", content: "It's also true")
+        Note(title: "SES is awesome", content: "It's true")
     ]
 
     var body: some View {
