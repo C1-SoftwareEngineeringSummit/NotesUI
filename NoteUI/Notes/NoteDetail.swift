@@ -21,6 +21,8 @@ struct NoteDetail: View {
 struct NoteDetail_Previews: PreviewProvider {
     static let notes = [Note(title: "Note title", content: "some content...")]
     static var previews: some View {
-        NoteDetail(notes: .constant(notes), index: 0)
+        NavigationView {
+            NoteDetail(notes: .constant(notes), index: 0)
+        }
     }
 }
