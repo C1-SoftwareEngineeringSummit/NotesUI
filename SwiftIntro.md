@@ -197,5 +197,3 @@ print(circle.area)
 circle.area = 50
 print(circle.radius)
 ```
-
-< add a section about enum/static property dot syntax here >
