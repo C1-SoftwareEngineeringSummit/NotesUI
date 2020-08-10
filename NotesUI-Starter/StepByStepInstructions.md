@@ -114,9 +114,9 @@ Check out your work in the Canvas to make sure everything is working. You might 
 3. You'll notice the following error:
     * `Cannot convert value of type 'String' to expected argument type 'Binding<String>'`
 
-> In SwiftUI, a **binding** creates a two-way shared connection between the `TextView` and a property marked with the `@Binding` property wrapper. User interaction with the `TextField` changes the value of `title`, and programmatically changing `title` causes the `TextField` to update its state.
+> In SwiftUI, a **binding** creates a two-way shared connection between the `TextView` and a property marked with the `@Binding` property wrapper. When a user interacts with the `TextField` and changes the value of `title`, it uses the binding to update the view's state accordingly.
 
-4. Add the @Binding property wrapper to the `notes` property, then use the binding by adding a `$` prefix to the `notes` property (`$notes`).
+1. Add the `@Binding` property wrapper to the `notes` property, then pass the binding in the `TextField` by adding a `$` prefix to the `notes[index].title` property.
 
 Your `NoteRow` should now look like this:
 
