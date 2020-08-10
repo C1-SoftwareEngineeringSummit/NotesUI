@@ -64,13 +64,13 @@ A **List** is a container which displays your data in a column, with a row for e
   2. Select the **SwiftUI View** option
   3. Name the file `NoteRow`
   4. Click `Create`
-* Take a moment to explore this new view. It includes a property named body of type View that contains a single Text view.  Notice it comes with a Canvas to preview your view.
+* Take a moment to explore this new view. It includes a property named body of type `View` that contains a single `Text` view.  Notice it comes with a Canvas on the right side of your split-screen to preview your view.
 * Let's start with declaring the data that we want to show.  In the newly created view, add a `notes` variable of type `[Note]` as a stored property of the `NoteRow` view.
   * `var notes: [Note]`
 * Since we want each row to only show a single note element from the array, add an `index` constant of type `Int` which specifies which note to show in the row.
   * `let index: Int`
 * Since we added new properties we now have to update the previews variable of the `NoteRow_Previews` struct as well
-  * Add an array of static `Note`s: `static let notes = [Note(title: "", content: "")]`
+  * Add an array of static `Note`'s: `static let notes = [Note(title: "", content: "")]`
   * Update the `NoteRow()` initializer in the previews struct to accept notes and index as a parameter like so: `NoteRow(notes: notes, index: 0)`
 
 Your `NoteRow.swift` file should now look like this:
@@ -114,9 +114,9 @@ Check out your work in the Canvas to make sure everything is working. You might 
 3. You'll notice the following error:
     * `Cannot convert value of type 'String' to expected argument type 'Binding<String>'`
 
-> In SwiftUI, a **binding** creates a two-way shared connection between the `TextView` and a property marked with the `@Binding` property wrapper. User interaction with the `TextField` changes the value of `title`, and programmatically changing `title` causes the `TextField` to update its state.
+> In SwiftUI, a **binding** creates a two-way shared connection between the `TextView` and a property marked with the `@Binding` property wrapper. When a user interacts with the `TextField` and changes the value of `title`, it uses the binding to update the view's state accordingly.
 
-4. Add the @Binding property wrapper to the `notes` property, then use the binding by adding a `$` prefix to the `notes` property (`$notes`).
+1. Add the `@Binding` property wrapper to the `notes` property, then pass the binding in the `TextField` by adding a `$` prefix to the `notes[index].title` property.
 
 Your `NoteRow` should now look like this:
 
@@ -161,7 +161,30 @@ struct NoteRow_Previews: PreviewProvider {
 }
 ```
 
-Refresh your canvas again to see the changes.
+Refresh your canvas again to see the updated preview of our `NoteRow`.
+
+The code in `NoteRow.swift` should now look like this:
+
+```swift
+import SwiftUI
+
+struct NoteRow: View {
+    @Binding var notes: [Note]
+    let index: Int
+
+    var body: some View {
+        TextField("Enter note title...", text: $notes[index].title)
+    }
+}
+
+struct NoteRow_Previews: PreviewProvider {
+    static let notes = [Note(title: "", content: "")]
+    static var previews: some View {
+        NoteRow(notes: .constant(notes), index: 0)
+            .previewLayout(.fixed(width: 300, height: 70))
+    }
+}
+```
 
 > Previewing your views is a powerful feature as it lets you see all the possibilites your view can live in. You can also use the `.environment` modifer to preview your views in Dark Mode! You can also preview your views in other platforms like the AppleTV or Apple Watch.
 >
