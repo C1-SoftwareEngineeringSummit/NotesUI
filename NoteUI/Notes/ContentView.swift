@@ -23,8 +23,10 @@ struct ContentView: View {
             }
             .navigationBarTitle("Notes")
             .navigationBarItems(trailing:
-                Button("New") {
+                Button(action: {
                     self.notes.insert(Note(title: "", content: ""), at: 0)
+                }) {
+                    Image(systemName: "plus")
                 }
             )
         }
