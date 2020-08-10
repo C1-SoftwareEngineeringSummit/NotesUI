@@ -197,3 +197,42 @@ print(circle.area)
 circle.area = 50
 print(circle.radius)
 ```
+
+### Property Dot Syntax
+Dot syntax in Swift, just like other languages, allows you to access instance properties and enum cases by specifying the property after the owner’s name, separated by “.”
+Protip: you can use the shorthand leading dot syntax by omitting the instance/enum owner's name when its type can be inferred (common in switch statements).
+
+```swift
+enum Element: String {
+    case water
+    case earth
+    case fire
+    case air
+}
+
+func benderInfo(name: String, elementType: Element) {
+    var powerMove: String
+
+    switch elementType {
+    case Element.air:
+        powerMove = "hurricane"
+    case .earth:
+        powerMove = "metalbending"
+    case .fire:
+        powerMove = "lightningbending"
+    case .water:
+        powerMove = "bloodbending"
+    }
+
+    // multiline string literal
+    print(
+        """
+        \(name): \(elementType.rawValue)bender
+        Special move: \(powerMove)
+
+        """
+    )
+}
+
+benderInfo(name: "Katara", elementType: .water)
+```
