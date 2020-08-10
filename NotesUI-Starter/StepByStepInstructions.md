@@ -118,6 +118,8 @@ Check out your work in the Canvas to make sure everything is working. You might 
 
 1. Add the `@Binding` property wrapper to the `notes` property, then pass the binding in the `TextField` by adding a `$` prefix to the `notes[index].title` property.
 
+> We used `@Binding` instead of `@State`, because the `TextField` view doesn't own this data—it receives an initial value from its parent view and mutates it. We will be creating the parent view (summary screen) soon.
+
 Your `NoteRow` should now look like this:
 
 ```swift
