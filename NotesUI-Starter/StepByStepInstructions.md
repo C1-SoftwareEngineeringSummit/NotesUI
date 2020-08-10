@@ -64,7 +64,7 @@ A **List** is a container which displays your data in a column, with a row for e
   2. Select the **SwiftUI View** option
   3. Name the file `NoteRow`
   4. Click `Create`
-* Take a moment to explore this new view. It includes a property named body of type `View` that contains a single `Text` view.  Notice it comes with a Canvas on the right side of you split-screen to preview your view.
+* Take a moment to explore this new view. It includes a property named body of type `View` that contains a single `Text` view.  Notice it comes with a Canvas on the right side of your split-screen to preview your view.
 * Let's start with declaring the data that we want to show.  In the newly created view, add a `notes` variable of type `[Note]` as a stored property of the `NoteRow` view.
   * `var notes: [Note]`
 * Since we want each row to only show a single note element from the array, add an `index` constant of type `Int` which specifies which note to show in the row.
